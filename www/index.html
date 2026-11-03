@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b0d12">
-<title>رافع GitHub</title>
+<title>GitHub Uploader</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -47,7 +47,7 @@ button{font:inherit}
 .sup small{display:block;color:var(--mu);font-size:.8rem}
 .sup>.ic{color:var(--sp)}
 .modes{display:grid;gap:10px;margin-top:6px}
-.mode{display:flex;gap:14px;align-items:center;text-align:right;width:100%;padding:16px;border-radius:16px;border:1px solid var(--bd);background:var(--in);color:var(--tx);transition:.15s}
+.mode{display:flex;gap:14px;align-items:center;text-align:start;width:100%;padding:16px;border-radius:16px;border:1px solid var(--bd);background:var(--in);color:var(--tx);transition:.15s}
 .mode:active{transform:scale(.98);border-color:var(--pr)}
 .tile{width:46px;height:46px;border-radius:13px;background:rgba(79,107,255,.12);color:var(--pr);display:grid;place-items:center;flex:none}
 .mode b{display:block;font-size:1rem}.mode small{color:var(--mu);font-size:.82rem}
@@ -98,96 +98,143 @@ button{font:inherit}
 .code{font-family:ui-monospace,Menlo,monospace;font-size:2rem;font-weight:800;letter-spacing:.2em;text-align:center;direction:ltr;padding:16px;border-radius:15px;background:var(--in);border:1.5px dashed var(--pr);color:var(--pr);margin:8px 0}
 .lnk{background:none;border:0;color:var(--mu);width:100%;padding:12px;margin-top:4px;font-size:.88rem;text-decoration:underline}
 a.btn{text-decoration:none}
-ol.st{padding:0 18px 0 0;margin:6px 0 10px;font-size:.86rem;color:var(--mu)}
+ol.st{padding:0;padding-inline-start:18px;margin:6px 0 10px;font-size:.86rem;color:var(--mu)}
+
+html[dir=rtl] .fw{transform:scaleX(-1)}
+html[dir=ltr] .bk{transform:scaleX(-1)}
+button.sup{width:100%;font:inherit;text-align:start;cursor:pointer}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.sheet-in{width:100%;max-width:520px;background:var(--card);border:1px solid var(--bd);border-radius:20px 20px 0 0;padding:20px 16px max(20px,env(safe-area-inset-bottom));box-shadow:var(--sh)}
+.sheet-in h2{font-size:1.05rem;font-weight:800;margin:0 0 6px}
+.langopt{display:flex;align-items:center;justify-content:space-between;width:100%;padding:14px;margin-top:8px;border-radius:13px;border:1px solid var(--bd);background:var(--in);color:var(--tx);font-weight:600;text-align:start}
+.langopt .ic{opacity:0}
+.langopt.on{border-color:var(--pr);background:rgba(79,107,255,.1);color:var(--pr)}
+.langopt.on .ic{opacity:1}
+.sup-head{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.sup-head .tile{background:rgba(255,46,91,.14);color:var(--sp)}
+.thanks{margin:0 0 14px;padding:14px;border-radius:15px;background:var(--in);border:1px solid var(--bd);font-size:.92rem;line-height:1.8}
+.qrwrap{width:216px;height:216px;margin:6px auto 0;border-radius:16px;overflow:hidden;border:1px solid var(--bd);background:#fff}
+.qrwrap img{display:block;width:100%;height:100%}
+.qrcap{text-align:center;margin:8px 0 12px}
+.kv{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--bd);border-radius:13px;background:var(--in);margin-bottom:8px}
+.kv small{color:var(--mu)}
+.copyrow{display:flex;gap:10px;align-items:center;padding:12px 14px;border:1px solid var(--bd);border-radius:13px;background:var(--in);margin-bottom:8px}
+.copyrow .tx{flex:1;min-width:0}
+.copyrow small{display:block;color:var(--mu);font-size:.78rem;margin-bottom:2px}
+.copyrow code{display:block;direction:ltr;text-align:left;font:.84rem/1.5 ui-monospace,Menlo,monospace;word-break:break-all;user-select:all;-webkit-user-select:all}
+.snote{font-size:.86rem;color:var(--mu);margin:12px 0 4px}
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></symbol><symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></symbol><symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol><symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3L21 2"/><path d="M17 6l3 3"/></symbol><symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/><path d="M3 12A9 9 0 0 1 18.5 5.8L21 8"/><path d="M21 3v5h-5"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol><symbol id="i-repo" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></symbol><symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></symbol><symbol id="i-activity" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></symbol><symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></symbol><symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M10 14L20 4"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></symbol><symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4"/><path d="M16 8l4 4-4 4"/><path d="M20 12H9"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></symbol><symbol id="i-zip" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M10 12h2M10 15h2M10 18h2"/></symbol><symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></symbol></svg>
 <main>
 <header>
-  <div class="brand"><div class="logo"><svg class="ic "><use href="#i-box"/></svg></div><div><h1>رافع GitHub</h1><p class="sub">تطبيقاتك ومواقعك على GitHub</p></div></div>
+  <div class="brand"><div class="logo"><svg class="ic "><use href="#i-box"/></svg></div><div><h1 data-i18n="app_title">رافع GitHub</h1><p class="sub" data-i18n="app_sub">تطبيقاتك ومواقعك على GitHub</p></div></div>
   <div class="hact">
-    <a class="ib hrt" href="https://abdelsalameselimane-cloud.github.io/support/" target="_blank" rel="noopener" aria-label="ادعم المطوّر"><svg class="ic "><use href="#i-heart"/></svg></a>
-    <button class="ib hid" id="out" onclick="logout()" aria-label="خروج"><svg class="ic "><use href="#i-logout"/></svg></button>
+    <button class="ib" onclick="openLang()" data-i18n-aria="aria_lang" aria-label="اللغة"><svg class="ic "><use href="#i-globe"/></svg></button>
+    <button class="ib hrt" onclick="openSupport()" data-i18n-aria="aria_support" aria-label="ادعم المطوّر"><svg class="ic "><use href="#i-heart"/></svg></button>
+    <button class="ib hid" id="out" onclick="logout()" data-i18n-aria="aria_logout" aria-label="خروج"><svg class="ic "><use href="#i-logout"/></svg></button>
   </div>
 </header>
 <div class="steps" id="steps"><i></i><i></i><i></i><i></i></div>
 
 <section class="card" id="s1">
-  <h2>تسجيل الدخول</h2>
+  <h2 data-i18n="login_title">تسجيل الدخول</h2>
   <div id="mainLogin">
-    <p class="mu">سجّل دخولك بحساب GitHub مباشرة، بدون توكن ولا كلمات مرور. يبقى حسابك مرتبطاً ولا تحتاج الدخول كل مرة.</p>
-    <button class="btn" onclick="startDevice()"><svg class="ic "><use href="#i-github"/></svg><span>الدخول بحساب GitHub</span></button>
-    <button class="lnk" onclick="toggleTok()">الدخول بتوكن (متقدم)</button>
+    <p class="mu" data-i18n="login_desc">سجّل دخولك بحساب GitHub مباشرة، بدون توكن ولا كلمات مرور. يبقى حسابك مرتبطاً ولا تحتاج الدخول كل مرة.</p>
+    <button class="btn" onclick="startDevice()"><svg class="ic "><use href="#i-github"/></svg><span data-i18n="login_btn">الدخول بحساب GitHub</span></button>
+    <button class="lnk" onclick="toggleTok()" data-i18n="tok_toggle">الدخول بتوكن (متقدم)</button>
     <div id="tokBox" class="hid">
       <input id="tok" type="password" placeholder="ghp_xxxxxxxx" dir="ltr" autocomplete="off">
-      <button class="btn sec" onclick="login()"><svg class="ic "><use href="#i-key"/></svg><span>دخول بالتوكن</span></button>
+      <button class="btn sec" onclick="login()"><svg class="ic "><use href="#i-key"/></svg><span data-i18n="tok_btn">دخول بالتوكن</span></button>
     </div>
   </div>
   <div id="devBox" class="hid">
-    <p class="mu">افتح GitHub وأدخل هذا الرمز ثم اضغط Authorize:</p>
+    <p class="mu" data-i18n="dev_desc">افتح GitHub وأدخل هذا الرمز ثم اضغط Authorize:</p>
     <div class="code" id="ucode"></div>
-    <a class="btn" id="openGh" target="_blank" rel="noopener"><svg class="ic "><use href="#i-ext"/></svg><span>نسخ الرمز وفتح GitHub</span></a>
-    <button class="btn sec" onclick="cancelDev()">إلغاء</button>
+    <a class="btn" id="openGh" target="_blank" rel="noopener"><svg class="ic "><use href="#i-ext"/></svg><span data-i18n="dev_open">نسخ الرمز وفتح GitHub</span></a>
+    <button class="btn sec" onclick="cancelDev()" data-i18n="cancel">إلغاء</button>
     <p class="sub" id="devSt" style="text-align:center;margin-top:10px"></p>
   </div>
   <div id="cidBox" class="hid">
-    <p class="mu">إعداد لمرة واحدة: أنشئ تطبيق OAuth خاصاً بك لربط الدخول.</p>
-    <ol class="st"><li>افتح github.com/settings/developers ← OAuth Apps ← New OAuth App</li><li>الاسم أي اسم، وفي Homepage و Callback اكتب https://github.com</li><li>فعّل خيار <b>Enable Device Flow</b> ثم Register</li><li>انسخ <b>Client ID</b> والصقه هنا</li></ol>
+    <p class="mu" data-i18n="cid_desc">إعداد لمرة واحدة: أنشئ تطبيق OAuth خاصاً بك لربط الدخول.</p>
+    <ol class="st"><li data-i18n-html="cid_li1">افتح github.com/settings/developers ← OAuth Apps ← New OAuth App</li><li data-i18n-html="cid_li2">الاسم أي اسم، وفي Homepage و Callback اكتب https://github.com</li><li data-i18n-html="cid_li3">فعّل خيار <b>Enable Device Flow</b> ثم Register</li><li data-i18n-html="cid_li4">انسخ <b>Client ID</b> والصقه هنا</li></ol>
     <input id="cid" placeholder="Client ID" dir="ltr" autocomplete="off">
-    <button class="btn" onclick="saveCid()"><span>حفظ ومتابعة</span></button>
+    <button class="btn" onclick="saveCid()"><span data-i18n="cid_save">حفظ ومتابعة</span></button>
   </div>
-  <div id="retryBox" class="hid"><button class="btn" onclick="retryLogin()">إعادة المحاولة</button></div>
+  <div id="retryBox" class="hid"><button class="btn" onclick="retryLogin()" data-i18n="retry">إعادة المحاولة</button></div>
   <p class="err" id="e1"></p>
 </section>
 
 <section class="card hid" id="s2">
-  <div class="who"><img id="av" alt=""><div><h2 id="hello"></h2><p class="sub">ماذا تريد أن ترفع؟</p></div></div>
+  <div class="who"><img id="av" alt=""><div><h2 id="hello"></h2><p class="sub" data-i18n="ask_upload">ماذا تريد أن ترفع؟</p></div></div>
   <div class="modes">
-    <button class="mode" onclick="pickKind('app')"><div class="tile"><svg class="ic "><use href="#i-phone"/></svg></div><div><b>رفع تطبيق (APK)</b><small>مشروع أندرويد أو Flutter أو ويب يتحوّل إلى تطبيق</small></div></button>
-    <button class="mode" onclick="pickKind('site')"><div class="tile"><svg class="ic "><use href="#i-globe"/></svg></div><div><b>نشر موقع HTML</b><small>استضافة مجانية على GitHub ورابط عام لموقعك</small></div></button>
+    <button class="mode" onclick="pickKind('app')"><div class="tile"><svg class="ic "><use href="#i-phone"/></svg></div><div><b data-i18n="mode_app">رفع تطبيق (APK)</b><small data-i18n="mode_app_d">مشروع أندرويد أو Flutter أو ويب يتحوّل إلى تطبيق</small></div></button>
+    <button class="mode" onclick="pickKind('site')"><div class="tile"><svg class="ic "><use href="#i-globe"/></svg></div><div><b data-i18n="mode_site">نشر موقع HTML</b><small data-i18n="mode_site_d">استضافة مجانية على GitHub ورابط عام لموقعك</small></div></button>
   </div>
-  <a class="sup" href="https://abdelsalameselimane-cloud.github.io/support/" target="_blank" rel="noopener"><div class="tile"><svg class="ic "><use href="#i-heart"/></svg></div><div class="tx"><b>ادعم المطوّر</b><small>أعجبك التطبيق؟ ادعمه بأي مبلغ بعملة USDT</small></div><svg class="ic "><use href="#i-ext"/></svg></a>
+  <button type="button" class="sup" onclick="openSupport()"><div class="tile"><svg class="ic "><use href="#i-heart"/></svg></div><div class="tx"><b data-i18n="sup_title">ادعم المطوّر</b><small data-i18n="sup_desc">أعجبك التطبيق؟ ادعمه بأي مبلغ بعملة USDT</small></div><svg class="ic fw"><use href="#i-arrow"/></svg></button>
 </section>
 
 <section class="card hid" id="s3">
   <h2 id="upTitle"></h2>
-  <div class="seg"><button id="segNew" class="on" onclick="setMode('new')">مشروع جديد</button><button id="segUpd" onclick="setMode('update')">تحديث مشروع</button></div>
+  <div class="seg"><button id="segNew" class="on" onclick="setMode('new')" data-i18n="seg_new">مشروع جديد</button><button id="segUpd" onclick="setMode('update')" data-i18n="seg_upd">تحديث مشروع</button></div>
   <div id="newBox">
     <input id="newName" placeholder="project-name" dir="ltr">
-    <label class="opt" id="privOpt"><input type="checkbox" id="priv"><span>مشروع خاص (Private)</span></label>
-    <p class="mu hid" id="pubNote">الاستضافة المجانية تتطلب أن يكون المشروع عاماً (Public).</p>
+    <label class="opt" id="privOpt"><input type="checkbox" id="priv"><span data-i18n="priv">مشروع خاص (Private)</span></label>
+    <p class="mu hid" id="pubNote" data-i18n="pub_note">الاستضافة المجانية تتطلب أن يكون المشروع عاماً (Public).</p>
   </div>
   <div id="updBox" class="hid">
-    <input id="q" placeholder="بحث..." dir="ltr" oninput="fillRepos()">
+    <input id="q" data-i18n-ph="ph_search" placeholder="بحث..." dir="ltr" oninput="fillRepos()">
     <div class="list" id="repoSel"></div>
   </div>
-  <div class="drop" id="drop"><div class="tile"><svg class="ic "><use href="#i-zip"/></svg></div><span id="zname">اضغط لاختيار ملف ZIP</span><input type="file" id="zip" class="fin"></div>
-  <details class="adv"><summary>خيارات متقدمة</summary>
-    <label class="opt"><input type="checkbox" id="replace"><span>حذف الملفات القديمة واستبدالها بالكامل</span></label>
-    <label class="opt" id="apkOpt"><input type="checkbox" id="autoapk" checked><span>بناء APK تلقائياً حسب نوع المشروع</span></label>
-    <input id="msg" placeholder="رسالة التحديث (اختياري)">
+  <div class="drop" id="drop"><div class="tile"><svg class="ic "><use href="#i-zip"/></svg></div><span id="zname" data-i18n="zip_app">اضغط لاختيار ملف ZIP</span><input type="file" id="zip" class="fin"></div>
+  <details class="adv"><summary data-i18n="adv">خيارات متقدمة</summary>
+    <label class="opt"><input type="checkbox" id="replace"><span data-i18n="opt_replace">حذف الملفات القديمة واستبدالها بالكامل</span></label>
+    <label class="opt" id="apkOpt"><input type="checkbox" id="autoapk" checked><span data-i18n="opt_apk">بناء APK تلقائياً حسب نوع المشروع</span></label>
+    <input id="msg" data-i18n-ph="ph_msg" placeholder="رسالة التحديث (اختياري)">
   </details>
-  <div class="row"><button class="btn sec" onclick="go(2)"><svg class="ic "><use href="#i-arrow"/></svg><span>رجوع</span></button><button class="btn" id="upBtn" onclick="upload()"><svg class="ic "><use href="#i-upload"/></svg><span>رفع</span></button></div>
+  <div class="row"><button class="btn sec" onclick="go(2)"><svg class="ic bk"><use href="#i-arrow"/></svg><span data-i18n="back">رجوع</span></button><button class="btn" id="upBtn" onclick="upload()"><svg class="ic "><use href="#i-upload"/></svg><span data-i18n="upload">رفع</span></button></div>
   <div class="bar hid" id="bar"><i id="bi"></i></div>
   <div id="log"></div>
   <p class="err" id="e4"></p>
 </section>
 
 <section class="card hid" id="s4">
-  <div class="done"><div class="tile"><svg class="ic "><use href="#i-check"/></svg></div><div><h2>تم الرفع بنجاح</h2><p class="sub" id="note"></p></div></div>
+  <div class="done"><div class="tile"><svg class="ic "><use href="#i-check"/></svg></div><div><h2 data-i18n="done_title">تم الرفع بنجاح</h2><p class="sub" id="note"></p></div></div>
   <div class="bs" id="bs"></div>
   <div id="bsx"></div>
-  <a class="btn dis" id="apkBtn" target="_blank" rel="noopener"><svg class="ic "><use href="#i-download"/></svg><span id="apkLbl">تحميل التطبيق (APK)</span></a>
+  <a class="btn dis" id="apkBtn" target="_blank" rel="noopener"><svg class="ic "><use href="#i-download"/></svg><span id="apkLbl" data-i18n="apk_dl">تحميل التطبيق (APK)</span></a>
   <div class="bar hid" id="dbar"><i id="dbi"></i></div>
   <div id="links"></div>
-  <a class="sup" href="https://abdelsalameselimane-cloud.github.io/support/" target="_blank" rel="noopener"><div class="tile"><svg class="ic "><use href="#i-heart"/></svg></div><div class="tx"><b>ادعم المطوّر</b><small>أعجبك التطبيق؟ ادعمه بأي مبلغ بعملة USDT</small></div><svg class="ic "><use href="#i-ext"/></svg></a>
-  <button class="btn sec" onclick="go(2)"><svg class="ic "><use href="#i-upload"/></svg><span>رفع مشروع آخر</span></button>
+  <button type="button" class="sup" onclick="openSupport()"><div class="tile"><svg class="ic "><use href="#i-heart"/></svg></div><div class="tx"><b data-i18n="sup_title">ادعم المطوّر</b><small data-i18n="sup_desc">أعجبك التطبيق؟ ادعمه بأي مبلغ بعملة USDT</small></div><svg class="ic fw"><use href="#i-arrow"/></svg></button>
+  <button class="btn sec" onclick="go(2)"><svg class="ic "><use href="#i-upload"/></svg><span data-i18n="upload_another">رفع مشروع آخر</span></button>
+</section>
+
+<section class="card hid" id="s5">
+  <div class="sup-head"><div class="tile"><svg class="ic "><use href="#i-heart"/></svg></div><div><h2 data-i18n="sup_title">ادعم المطوّر</h2><p class="sub" data-i18n="sup_desc">أعجبك التطبيق؟ ادعمه بأي مبلغ بعملة USDT</p></div></div>
+  <p class="thanks" data-i18n="sup_thanks">مرحباً، أنا مطوّر هذه المشاريع. أبنيها في وقتي الخاص وأشاركها مجاناً. إن أفادتك، فدعمك مهما كان بسيطاً يعني لي الكثير. شكراً لك من القلب. — Puck</p>
+  <div class="qrwrap"><img alt="USDT TRC20 QR" src="data:image/png;base64,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"></div>
+  <p class="mu qrcap" data-i18n="sup_scan">امسح الرمز بتطبيق محفظتك</p>
+  <div class="kv"><small data-i18n="f_currency">العملة</small><b>USDT</b></div>
+  <div class="kv"><small data-i18n="f_network">الشبكة</small><b>TRON (TRC20)</b></div>
+  <div class="copyrow"><div class="tx"><small data-i18n="f_address">عنوان المحفظة</small><code id="walAddr">TCZypvFBnHFDK4HFHGgVrEFHTohaRLN44G</code></div><button class="ib" onclick="copyVal('walAddr',this)" data-i18n-aria="aria_copy" aria-label="نسخ"><svg class="ic "><use href="#i-copy"/></svg></button></div>
+  <div class="copyrow"><div class="tx"><small>Bybit UID · <span data-i18n="uid_hint">للتحويل الداخلي بدون رسوم</span></small><code id="walUid">600451746</code></div><button class="ib" onclick="copyVal('walUid',this)" data-i18n-aria="aria_copy" aria-label="نسخ"><svg class="ic "><use href="#i-copy"/></svg></button></div>
+  <p class="snote" data-i18n="sup_note">يرجى الإرسال عبر شبكة TRON (TRC20) فقط، لأن الإرسال عبر شبكة أخرى قد يضيّع المبلغ.</p>
+  <button class="btn sec" onclick="closeSupport()"><svg class="ic bk"><use href="#i-arrow"/></svg><span data-i18n="back">رجوع</span></button>
 </section>
 </main>
+<div class="sheet hid" id="langSheet" onclick="if(event.target===this)closeLang()">
+  <div class="sheet-in">
+    <h2 data-i18n="lang_title">اللغة</h2>
+    <button class="langopt" data-l="auto" onclick="setLang('auto')"><span data-i18n="lang_auto">تلقائي (لغة الجهاز)</span><svg class="ic "><use href="#i-check"/></svg></button>
+    <button class="langopt" data-l="ar" onclick="setLang('ar')"><span>العربية</span><svg class="ic "><use href="#i-check"/></svg></button>
+    <button class="langopt" data-l="en" onclick="setLang('en')"><span>English</span><svg class="ic "><use href="#i-check"/></svg></button>
+    <button class="langopt" data-l="fr" onclick="setLang('fr')"><span>Français</span><svg class="ic "><use href="#i-check"/></svg></button>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 <script>
-function showErr(m){try{var t=document.getElementById('toast');t.textContent='خطأ: '+m;t.classList.add('on');setTimeout(function(){t.classList.remove('on')},9000)}catch(_){}}
+function showErr(m){try{var el=document.getElementById('toast');el.textContent=tr('err_prefix')+m;el.classList.add('on');setTimeout(function(){el.classList.remove('on')},9000)}catch(_){}}
 window.addEventListener('error',function(e){showErr(e.message)});
 window.addEventListener('unhandledrejection',function(e){showErr(e.reason&&e.reason.message||e.reason)});
 var $=s=>document.getElementById(s);
@@ -196,7 +243,75 @@ var token='',user=null,repos=[],mode='',zipFile=null;
 var ic=(n,c='')=>`<svg class="ic ${c}"><use href="#i-${n}"/></svg>`;
 var store={get:k=>{try{return localStorage.getItem(k)}catch{return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}},del:k=>{try{localStorage.removeItem(k)}catch{}}};
 
-function go(n){for(let i=1;i<=4;i++)$('s'+i).classList.toggle('hid',i!==n);$('out').classList.toggle('hid',!user);[...$('steps').children].forEach((e,i)=>e.classList.toggle('on',i<n))}
+/* ===== i18n: ar / en / fr ===== */
+var LANGS=['ar','en','fr'],RTL={ar:1};
+var I18N={"ar": {"app_title": "رافع GitHub", "app_sub": "تطبيقاتك ومواقعك على GitHub", "aria_support": "ادعم المطوّر", "aria_logout": "خروج", "aria_lang": "اللغة", "aria_copy": "نسخ", "aria_open": "فتح", "lang_title": "اللغة", "lang_auto": "تلقائي (لغة الجهاز)", "login_title": "تسجيل الدخول", "login_desc": "سجّل دخولك بحساب GitHub مباشرة، بدون توكن ولا كلمات مرور. يبقى حسابك مرتبطاً ولا تحتاج الدخول كل مرة.", "login_btn": "الدخول بحساب GitHub", "tok_toggle": "الدخول بتوكن (متقدم)", "tok_btn": "دخول بالتوكن", "dev_desc": "افتح GitHub وأدخل هذا الرمز ثم اضغط Authorize:", "dev_open": "نسخ الرمز وفتح GitHub", "cancel": "إلغاء", "cid_desc": "إعداد لمرة واحدة: أنشئ تطبيق OAuth خاصاً بك لربط الدخول.", "cid_li1": "افتح github.com/settings/developers ← OAuth Apps ← New OAuth App", "cid_li2": "الاسم أي اسم، وفي Homepage و Callback اكتب https://github.com", "cid_li3": "فعّل خيار <b>Enable Device Flow</b> ثم Register", "cid_li4": "انسخ <b>Client ID</b> والصقه هنا", "cid_save": "حفظ ومتابعة", "retry": "إعادة المحاولة", "err_prefix": "خطأ: ", "verifying": "جاري التحقق...", "enter_token": "أدخل التوكن", "session_expired": "انتهت صلاحية الدخول، سجّل دخولك من جديد", "no_conn": "تعذّر الاتصال بـ GitHub، تحقق من الإنترنت", "login_fail": "فشل الدخول: ", "only_native": "الدخول بحساب GitHub يعمل داخل تطبيق APK فقط لأن المتصفح يمنعه. ثبّت التطبيق أو استخدم التوكن هنا.", "waiting_approval": "بانتظار موافقتك...", "code_expired": "انتهت صلاحية الرمز، حاول مرة أخرى", "denied": "تم رفض الطلب", "start_fail": "تعذّر بدء الدخول: ", "bad_id": "معرّف غير صالح", "ask_upload": "ماذا تريد أن ترفع؟", "mode_app": "رفع تطبيق (APK)", "mode_app_d": "مشروع أندرويد أو Flutter أو ويب يتحوّل إلى تطبيق", "mode_site": "نشر موقع HTML", "mode_site_d": "استضافة مجانية على GitHub ورابط عام لموقعك", "sup_title": "ادعم المطوّر", "sup_desc": "أعجبك التطبيق؟ ادعمه بأي مبلغ بعملة USDT", "seg_new": "مشروع جديد", "seg_upd": "تحديث مشروع", "priv": "مشروع خاص (Private)", "pub_note": "الاستضافة المجانية تتطلب أن يكون المشروع عاماً (Public).", "ph_search": "بحث...", "zip_app": "اضغط لاختيار ملف ZIP", "zip_site": "اضغط لاختيار ملف ZIP أو HTML", "adv": "خيارات متقدمة", "opt_replace": "حذف الملفات القديمة واستبدالها بالكامل", "opt_apk": "بناء APK تلقائياً حسب نوع المشروع", "ph_msg": "رسالة التحديث (اختياري)", "back": "رجوع", "upload": "رفع", "up_app": "رفع تطبيق", "up_site": "نشر موقع HTML", "loading": "جاري التحميل...", "not_zip": "هذا الملف ليس ZIP صالحاً", "read_fail_retry": "تعذّرت قراءة الملف، جرّب اختياره مرة أخرى", "pick_repo": "اختر المشروع من القائمة", "bad_name": "اسم المشروع غير صالح: أحرف إنجليزية وأرقام و - _ . فقط", "pick_zip_site": "اختر ملف ZIP أو HTML أولاً", "pick_zip": "اختر ملف ZIP أولاً", "html_for_app": "هذا ملف HTML، اختر ملف ZIP للتطبيق", "reading": "قراءة الملف...", "n_files": "{n} ملف", "empty_zip": "الملف فارغ", "no_index": "لم أجد ملف index.html في المشروع", "creating": "إنشاء المشروع...", "empty_repo": "مشروع فارغ، تهيئة...", "uploading": "رفع الملفات...", "upload_fail_file": "فشل رفع {n}: ", "wf_exists": "يوجد ملف بناء في المشروع، تُرك كما هو", "proj_type": "نوع المشروع: {l} — أُضيف ملف بناء APK", "no_type": "لم أتعرف على نوع المشروع، لم يُضف بناء APK", "building_release": "بناء الإصدار...", "enabling_pages": "تفعيل الاستضافة...", "no_picker": "مكوّن اختيار الملفات غير متوفر في هذا الإصدار", "read_retry": "تعذّرت القراءة ({m})، اضغط مرة ثانية", "file_read_fail": "تعذّرت قراءة الملف: ", "done_title": "تم الرفع بنجاح", "apk_dl": "تحميل التطبيق (APK)", "upload_another": "رفع مشروع آخر", "dl_apk_direct": "تحميل APK مباشر", "dl_apk_direct_d": "يعمل بعد انتهاء البناء (نحو 5 دقائق)", "dl_zip": "تحميل المشروع (ZIP)", "follow_build": "متابعة البناء", "open_site": "فتح الموقع", "your_site": "رابط موقعك", "site_soon": "يظهر خلال دقيقة أو دقيقتين", "repo_page": "صفحة المشروع", "private_note": "المشروع خاص: الروابط تعمل لحسابك فقط", "ch_status": "حالة البناء", "ch_result": "نتيجة البناء", "act_download": "تحميل التطبيق", "act_copy": "نسخ الخلل", "act_open": "فتح الموقع", "copied_err": "تم نسخ الخلل", "copy_fail": "تعذّر النسخ", "copied": "تم النسخ", "copy_manual": "تعذّر النسخ، حدّد النص يدوياً", "building": "جاري بناء التطبيق", "build_eta": "قد يستغرق 5 إلى 8 دقائق", "build_failed": "فشل البناء", "reading_log": "جاري قراءة سجل الخطأ...", "in_step": "في الخطوة: {s}", "log_fail": "تعذّر قراءة السجل", "what_build": "بناء التطبيق", "what_site": "نشر الموقع", "failed": "فشل {x}", "copy_log": "نسخ سجل الخطأ", "open_gh": "فتح على GitHub", "pages_enable_fail": "تعذّر تفعيل الاستضافة", "publishing": "جاري نشر الموقع", "publish_eta": "يستغرق عادةً أقل من دقيقتين", "elapsed": "الوقت المنقضي {t}", "site_done": "تم نشر الموقع", "site_done_sub": "قد يحتاج ظهوره دقيقة إضافية", "site_published": "تم نشر موقعك", "pages_build_fail": "فشل بناء الصفحات", "publish_slow": "النشر يستغرق وقتاً طويلاً", "check_pages": "تحقق من إعدادات Pages في المشروع", "n_min": "{m} د", "build_not_started": "لم يبدأ البناء", "check_actions": "تأكد أن GitHub Actions مفعّل في المشروع", "uploaded": "تم الرفع", "no_auto_build": "لا يوجد بناء تلقائي لهذا المشروع", "build_slow": "البناء يستغرق وقتاً طويلاً", "follow_actions": "تابعه من صفحة Actions", "build_done": "اكتمل البناء", "app_ready": "التطبيق جاهز للتحميل", "build_done_n": "اكتمل بناء التطبيق", "bm_desc": "متابعة البناء والنشر", "dl_progress": "جاري التحميل...", "dl_pct": "جاري التحميل {p}%", "opening_installer": "جاري فتح المثبّت...", "install_hint": "اضغط «تثبيت». وإن طلب الهاتف السماح فعّله ثم أعد الضغط", "dl_fail": "تعذّر التحميل داخل التطبيق، سيفتح المتصفح", "sup_thanks": "مرحباً، أنا مطوّر هذه المشاريع. أبنيها في وقتي الخاص وأشاركها مجاناً. إن أفادتك، فدعمك مهما كان بسيطاً يعني لي الكثير. شكراً لك من القلب. — Puck", "sup_scan": "امسح الرمز بتطبيق محفظتك", "f_currency": "العملة", "f_network": "الشبكة", "f_address": "عنوان المحفظة", "uid_hint": "للتحويل الداخلي بدون رسوم", "sup_note": "يرجى الإرسال عبر شبكة TRON (TRC20) فقط، لأن الإرسال عبر شبكة أخرى قد يضيّع المبلغ."}, "en": {"app_title": "GitHub Uploader", "app_sub": "Your apps and sites on GitHub", "aria_support": "Support the developer", "aria_logout": "Log out", "aria_lang": "Language", "aria_copy": "Copy", "aria_open": "Open", "lang_title": "Language", "lang_auto": "Automatic (device language)", "login_title": "Sign in", "login_desc": "Sign in with your GitHub account directly, no token or password needed. Your account stays linked, so you don’t have to sign in every time.", "login_btn": "Sign in with GitHub", "tok_toggle": "Sign in with a token (advanced)", "tok_btn": "Sign in with token", "dev_desc": "Open GitHub, enter this code, then tap Authorize:", "dev_open": "Copy code and open GitHub", "cancel": "Cancel", "cid_desc": "One-time setup: create your own OAuth app to link sign-in.", "cid_li1": "Open github.com/settings/developers → OAuth Apps → New OAuth App", "cid_li2": "Use any name, and enter https://github.com in Homepage and Callback", "cid_li3": "Turn on <b>Enable Device Flow</b>, then Register", "cid_li4": "Copy the <b>Client ID</b> and paste it here", "cid_save": "Save and continue", "retry": "Try again", "err_prefix": "Error: ", "verifying": "Verifying...", "enter_token": "Enter the token", "session_expired": "Your session expired, please sign in again", "no_conn": "Couldn’t reach GitHub, check your internet connection", "login_fail": "Sign-in failed: ", "only_native": "Signing in with GitHub only works inside the APK app because browsers block it. Install the app or use a token here.", "waiting_approval": "Waiting for your approval...", "code_expired": "The code expired, try again", "denied": "Request denied", "start_fail": "Couldn’t start sign-in: ", "bad_id": "Invalid ID", "ask_upload": "What do you want to upload?", "mode_app": "Upload an app (APK)", "mode_app_d": "An Android, Flutter or web project turned into an app", "mode_site": "Publish an HTML site", "mode_site_d": "Free hosting on GitHub with a public link to your site", "sup_title": "Support the developer", "sup_desc": "Like the app? Support it with any amount in USDT", "seg_new": "New project", "seg_upd": "Update project", "priv": "Private project", "pub_note": "Free hosting requires the project to be public.", "ph_search": "Search...", "zip_app": "Tap to choose a ZIP file", "zip_site": "Tap to choose a ZIP or HTML file", "adv": "Advanced options", "opt_replace": "Delete old files and replace them completely", "opt_apk": "Build an APK automatically based on project type", "ph_msg": "Update message (optional)", "back": "Back", "upload": "Upload", "up_app": "Upload an app", "up_site": "Publish an HTML site", "loading": "Loading...", "not_zip": "This file is not a valid ZIP", "read_fail_retry": "Couldn’t read the file, try picking it again", "pick_repo": "Choose a project from the list", "bad_name": "Invalid project name: English letters, digits and - _ . only", "pick_zip_site": "Choose a ZIP or HTML file first", "pick_zip": "Choose a ZIP file first", "html_for_app": "This is an HTML file, choose a ZIP file for the app", "reading": "Reading file...", "n_files": "{n} files", "empty_zip": "The file is empty", "no_index": "Couldn’t find an index.html file in the project", "creating": "Creating project...", "empty_repo": "Empty project, initializing...", "uploading": "Uploading files...", "upload_fail_file": "Failed to upload {n}: ", "wf_exists": "The project already has a build file, left unchanged", "proj_type": "Project type: {l}, APK build file added", "no_type": "Couldn’t recognize the project type, no APK build added", "building_release": "Preparing release...", "enabling_pages": "Enabling hosting...", "no_picker": "The file picker component isn’t available in this version", "read_retry": "Read failed ({m}), tap again", "file_read_fail": "Couldn’t read the file: ", "done_title": "Upload complete", "apk_dl": "Download app (APK)", "upload_another": "Upload another project", "dl_apk_direct": "Direct APK download", "dl_apk_direct_d": "Works once the build finishes (about 5 minutes)", "dl_zip": "Download project (ZIP)", "follow_build": "Follow the build", "open_site": "Open site", "your_site": "Your site link", "site_soon": "Appears within a minute or two", "repo_page": "Project page", "private_note": "Private project: links only work for your account", "ch_status": "Build status", "ch_result": "Build result", "act_download": "Download app", "act_copy": "Copy error", "act_open": "Open site", "copied_err": "Error copied", "copy_fail": "Couldn’t copy", "copied": "Copied", "copy_manual": "Couldn’t copy, select the text manually", "building": "Building the app", "build_eta": "May take 5 to 8 minutes", "build_failed": "Build failed", "reading_log": "Reading the error log...", "in_step": "At step: {s}", "log_fail": "Couldn’t read the log", "what_build": "building the app", "what_site": "publishing the site", "failed": "Failed {x}", "copy_log": "Copy error log", "open_gh": "Open on GitHub", "pages_enable_fail": "Couldn’t enable hosting", "publishing": "Publishing the site", "publish_eta": "Usually takes under two minutes", "elapsed": "Elapsed time {t}", "site_done": "Site published", "site_done_sub": "It may take an extra minute to appear", "site_published": "Your site is published", "pages_build_fail": "Pages build failed", "publish_slow": "Publishing is taking a long time", "check_pages": "Check the Pages settings in the project", "n_min": "{m} min", "build_not_started": "The build didn’t start", "check_actions": "Make sure GitHub Actions is enabled in the project", "uploaded": "Uploaded", "no_auto_build": "This project has no automatic build", "build_slow": "The build is taking a long time", "follow_actions": "Follow it from the Actions page", "build_done": "Build complete", "app_ready": "The app is ready to download", "build_done_n": "App build complete", "bm_desc": "Tracking build and publishing", "dl_progress": "Downloading...", "dl_pct": "Downloading {p}%", "opening_installer": "Opening the installer...", "install_hint": "Tap “Install”. If the phone asks for permission, allow it and tap again", "dl_fail": "Couldn’t download inside the app, opening the browser", "sup_thanks": "Hi, I’m the developer behind these projects. I build them in my spare time and share them for free. If they’ve helped you, your support, big or small, means a lot to me. Thank you from the heart. — Puck", "sup_scan": "Scan with your wallet app", "f_currency": "Currency", "f_network": "Network", "f_address": "Wallet address", "uid_hint": "for fee-free internal transfers", "sup_note": "Please send only via the TRON (TRC20) network, since funds sent over any other network can be lost."}, "fr": {"app_title": "GitHub Uploader", "app_sub": "Vos applications et sites sur GitHub", "aria_support": "Soutenir le développeur", "aria_logout": "Se déconnecter", "aria_lang": "Langue", "aria_copy": "Copier", "aria_open": "Ouvrir", "lang_title": "Langue", "lang_auto": "Automatique (langue de l’appareil)", "login_title": "Connexion", "login_desc": "Connectez-vous directement avec votre compte GitHub, sans jeton ni mot de passe. Votre compte reste lié, inutile de vous reconnecter à chaque fois.", "login_btn": "Se connecter avec GitHub", "tok_toggle": "Se connecter avec un jeton (avancé)", "tok_btn": "Connexion par jeton", "dev_desc": "Ouvrez GitHub, saisissez ce code, puis appuyez sur Authorize :", "dev_open": "Copier le code et ouvrir GitHub", "cancel": "Annuler", "cid_desc": "Configuration unique : créez votre propre application OAuth pour lier la connexion.", "cid_li1": "Ouvrez github.com/settings/developers → OAuth Apps → New OAuth App", "cid_li2": "Choisissez un nom quelconque et saisissez https://github.com dans Homepage et Callback", "cid_li3": "Activez <b>Enable Device Flow</b>, puis Register", "cid_li4": "Copiez le <b>Client ID</b> et collez-le ici", "cid_save": "Enregistrer et continuer", "retry": "Réessayer", "err_prefix": "Erreur : ", "verifying": "Vérification...", "enter_token": "Saisissez le jeton", "session_expired": "Session expirée, reconnectez-vous", "no_conn": "Impossible de joindre GitHub, vérifiez votre connexion", "login_fail": "Échec de la connexion : ", "only_native": "La connexion avec GitHub ne fonctionne que dans l’application APK, car le navigateur la bloque. Installez l’application ou utilisez un jeton ici.", "waiting_approval": "En attente de votre approbation...", "code_expired": "Le code a expiré, réessayez", "denied": "Demande refusée", "start_fail": "Impossible de démarrer la connexion : ", "bad_id": "Identifiant invalide", "ask_upload": "Que voulez-vous envoyer ?", "mode_app": "Envoyer une application (APK)", "mode_app_d": "Un projet Android, Flutter ou web transformé en application", "mode_site": "Publier un site HTML", "mode_site_d": "Hébergement gratuit sur GitHub avec un lien public vers votre site", "sup_title": "Soutenir le développeur", "sup_desc": "Vous aimez l’application ? Soutenez-la avec n’importe quel montant en USDT", "seg_new": "Nouveau projet", "seg_upd": "Mettre à jour un projet", "priv": "Projet privé (Private)", "pub_note": "L’hébergement gratuit exige un projet public (Public).", "ph_search": "Rechercher...", "zip_app": "Appuyez pour choisir un fichier ZIP", "zip_site": "Appuyez pour choisir un fichier ZIP ou HTML", "adv": "Options avancées", "opt_replace": "Supprimer les anciens fichiers et les remplacer entièrement", "opt_apk": "Générer l’APK automatiquement selon le type de projet", "ph_msg": "Message de mise à jour (facultatif)", "back": "Retour", "upload": "Envoyer", "up_app": "Envoyer une application", "up_site": "Publier un site HTML", "loading": "Chargement...", "not_zip": "Ce fichier n’est pas un ZIP valide", "read_fail_retry": "Lecture du fichier impossible, essayez de le sélectionner à nouveau", "pick_repo": "Choisissez un projet dans la liste", "bad_name": "Nom de projet invalide : lettres latines, chiffres et - _ . uniquement", "pick_zip_site": "Choisissez d’abord un fichier ZIP ou HTML", "pick_zip": "Choisissez d’abord un fichier ZIP", "html_for_app": "Ceci est un fichier HTML, choisissez un fichier ZIP pour l’application", "reading": "Lecture du fichier...", "n_files": "{n} fichiers", "empty_zip": "Le fichier est vide", "no_index": "Aucun fichier index.html trouvé dans le projet", "creating": "Création du projet...", "empty_repo": "Projet vide, initialisation...", "uploading": "Envoi des fichiers...", "upload_fail_file": "Échec de l’envoi de {n} : ", "wf_exists": "Le projet contient déjà un fichier de build, laissé tel quel", "proj_type": "Type de projet : {l}, fichier de build APK ajouté", "no_type": "Type de projet non reconnu, aucun build APK ajouté", "building_release": "Préparation de la version...", "enabling_pages": "Activation de l’hébergement...", "no_picker": "Le sélecteur de fichiers n’est pas disponible dans cette version", "read_retry": "Échec de lecture ({m}), appuyez à nouveau", "file_read_fail": "Lecture du fichier impossible : ", "done_title": "Envoi réussi", "apk_dl": "Télécharger l’application (APK)", "upload_another": "Envoyer un autre projet", "dl_apk_direct": "Téléchargement direct de l’APK", "dl_apk_direct_d": "Disponible une fois le build terminé (environ 5 minutes)", "dl_zip": "Télécharger le projet (ZIP)", "follow_build": "Suivre le build", "open_site": "Ouvrir le site", "your_site": "Lien de votre site", "site_soon": "Apparaît dans une à deux minutes", "repo_page": "Page du projet", "private_note": "Projet privé : les liens ne fonctionnent que pour votre compte", "ch_status": "État du build", "ch_result": "Résultat du build", "act_download": "Télécharger l’application", "act_copy": "Copier l’erreur", "act_open": "Ouvrir le site", "copied_err": "Erreur copiée", "copy_fail": "Copie impossible", "copied": "Copié", "copy_manual": "Copie impossible, sélectionnez le texte manuellement", "building": "Création de l’application", "build_eta": "Peut prendre de 5 à 8 minutes", "build_failed": "Échec du build", "reading_log": "Lecture du journal d’erreurs...", "in_step": "À l’étape : {s}", "log_fail": "Impossible de lire le journal", "what_build": "du build de l’application", "what_site": "de la publication du site", "failed": "Échec {x}", "copy_log": "Copier le journal d’erreurs", "open_gh": "Ouvrir sur GitHub", "pages_enable_fail": "Impossible d’activer l’hébergement", "publishing": "Publication du site", "publish_eta": "Prend généralement moins de deux minutes", "elapsed": "Temps écoulé {t}", "site_done": "Site publié", "site_done_sub": "Il peut falloir une minute de plus pour qu’il apparaisse", "site_published": "Votre site est publié", "pages_build_fail": "Échec de la compilation des pages", "publish_slow": "La publication prend du temps", "check_pages": "Vérifiez les paramètres Pages du projet", "n_min": "{m} min", "build_not_started": "Le build n’a pas démarré", "check_actions": "Vérifiez que GitHub Actions est activé dans le projet", "uploaded": "Envoi terminé", "no_auto_build": "Ce projet n’a pas de build automatique", "build_slow": "Le build prend du temps", "follow_actions": "Suivez-le depuis la page Actions", "build_done": "Build terminé", "app_ready": "L’application est prête à être téléchargée", "build_done_n": "Build de l’application terminé", "bm_desc": "Suivi du build et de la publication", "dl_progress": "Téléchargement...", "dl_pct": "Téléchargement {p} %", "opening_installer": "Ouverture de l’installateur...", "install_hint": "Appuyez sur « Installer ». Si le téléphone demande une autorisation, accordez-la puis appuyez à nouveau", "dl_fail": "Téléchargement impossible dans l’application, ouverture du navigateur", "sup_thanks": "Bonjour, je suis le développeur derrière ces projets. Je les crée pendant mon temps libre et je les partage gratuitement. S’ils vous ont été utiles, votre soutien, même modeste, compte énormément pour moi. Merci du fond du cœur. — Puck", "sup_scan": "Scannez avec votre application de portefeuille", "f_currency": "Devise", "f_network": "Réseau", "f_address": "Adresse du portefeuille", "uid_hint": "pour un transfert interne sans frais", "sup_note": "Merci d’envoyer uniquement via le réseau TRON (TRC20), car des fonds envoyés sur un autre réseau peuvent être perdus."}};
+var langPref=store.get('lang');if(langPref!=='auto'&&LANGS.indexOf(langPref)<0)langPref='auto';
+var lang='en';
+function detectLang(){
+  var l=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'en'];
+  for(var i=0;i<l.length;i++){var b=String(l[i]).toLowerCase().split('-')[0];if(LANGS.indexOf(b)>=0)return b}
+  return 'en';
+}
+function tr(k,v){
+  var s=(I18N[lang]&&I18N[lang][k])||I18N.en[k]||I18N.ar[k]||k;
+  if(v)for(var x in v)s=s.split('{'+x+'}').join(v[x]);
+  return s;
+}
+function applyLang(){
+  lang=langPref==='auto'?detectLang():langPref;
+  var h=document.documentElement;h.lang=lang;h.dir=RTL[lang]?'rtl':'ltr';
+  document.title=tr('app_title');
+  document.querySelectorAll('[data-i18n]').forEach(function(e){e.textContent=tr(e.getAttribute('data-i18n'))});
+  document.querySelectorAll('[data-i18n-html]').forEach(function(e){e.innerHTML=tr(e.getAttribute('data-i18n-html'))});
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(e){e.placeholder=tr(e.getAttribute('data-i18n-ph'))});
+  document.querySelectorAll('[data-i18n-aria]').forEach(function(e){e.setAttribute('aria-label',tr(e.getAttribute('data-i18n-aria')))});
+  document.querySelectorAll('.langopt').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-l')===langPref)});
+  refreshDyn();
+}
+function openLang(){$('langSheet').classList.remove('hid')}
+function closeLang(){$('langSheet').classList.add('hid')}
+function setLang(l){langPref=l;kvSet('lang',l);applyLang();closeLang()}
+
+/* texts that JS builds at runtime are re-rendered when the language changes */
+var scr=1,prevScr=1,apkOk=false,apkHide=false,doneInfo=null,lastBS=null;
+function setUpTitle(){$('upTitle').textContent=tr(kind==='site'?'up_site':'up_app')}
+function refreshDyn(){
+  try{
+    setUpTitle();
+    if(!pickedFile&&!($('zip').files&&$('zip').files[0]))$('zname').textContent=tr(kind==='site'?'zip_site':'zip_app');
+    if(lastBS)setBS(lastBS[0],tr(lastBS[1],lastBS[3]),lastBS[2]?tr(lastBS[2],lastBS[3]):'');
+    if(doneInfo)renderDoneUI(doneInfo);
+  }catch(e){}
+}
+
+/* ===== screens (1 login, 2 home, 3 upload, 4 result, 5 support) ===== */
+function paint(n,top){
+  for(let i=1;i<=5;i++)$('s'+i).classList.toggle('hid',i!==n);
+  $('out').classList.toggle('hid',!user);
+  if(n<5)[...$('steps').children].forEach((e,i)=>e.classList.toggle('on',i<n));
+  if(top)window.scrollTo(0,0);
+}
+function go(n){
+  if(scr===5){prevScr=n;$('out').classList.toggle('hid',!user);return}  /* a background step finished while support is open */
+  scr=n;paint(n);
+}
+function openSupport(){
+  if(scr===5)return;
+  prevScr=scr;scr=5;paint(5,true);
+  try{history.pushState({sup:1},'')}catch(e){}
+}
+function closeSupport(){
+  if(history.state&&history.state.sup){history.back();return}
+  scr=prevScr;paint(prevScr,true);
+}
+window.addEventListener('popstate',function(){if(scr===5){scr=prevScr;paint(prevScr,true)}});
+function copyVal(id,btn){
+  copyText($(id).textContent.trim()).then(function(ok){
+    toast(tr(ok?'copied':'copy_fail'));
+    btn.innerHTML=ic(ok?'check':'alert');setTimeout(function(){btn.innerHTML=ic('copy')},1500);
+  });
+}
 async function gh(path,opt={}){
   const r=await fetch('https://api.github.com'+path,{...opt,headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json','Content-Type':'application/json'}});
   if(!r.ok){let m='';try{m=(await r.json()).message}catch{}const e=new Error(m||('HTTP '+r.status));e.status=r.status;throw e}
@@ -210,7 +325,7 @@ var devTimer=null,devCancel=true;
 function toggleTok(){$('tokBox').classList.toggle('hid')}
 function saveCid(){
   const v=$('cid').value.trim();
-  if(!/^[A-Za-z0-9._]{8,}$/.test(v)){$('e1').textContent='معرّف غير صالح';return}
+  if(!/^[A-Za-z0-9._]{8,}$/.test(v)){$('e1').textContent=tr('bad_id');return}
   store.set('gh_cid',v);$('cidBox').classList.add('hid');$('mainLogin').classList.remove('hid');$('e1').textContent='';startDevice();
 }
 async function form(url,data){
@@ -221,29 +336,29 @@ function endDev(msg){devCancel=true;clearTimeout(devTimer);$('devBox').classList
 function cancelDev(){endDev()}
 async function startDevice(){
   $('e1').textContent='';
-  if(!NATIVE){$('e1').textContent='الدخول بحساب GitHub يعمل داخل تطبيق APK فقط لأن المتصفح يمنعه. ثبّت التطبيق أو استخدم التوكن هنا.';$('tokBox').classList.remove('hid');return}
+  if(!NATIVE){$('e1').textContent=tr('only_native');$('tokBox').classList.remove('hid');return}
   if(!cid()){$('mainLogin').classList.add('hid');$('cidBox').classList.remove('hid');return}
   try{
     const d=await form('https://github.com/login/device/code',{client_id:cid(),scope:'repo workflow'});
     if(d.error)throw new Error(d.error_description||d.error);
     $('ucode').textContent=d.user_code;$('openGh').href=d.verification_uri;
     $('openGh').onclick=()=>{try{navigator.clipboard.writeText(d.user_code)}catch{}};
-    $('mainLogin').classList.add('hid');$('devBox').classList.remove('hid');$('devSt').textContent='بانتظار موافقتك...';
+    $('mainLogin').classList.add('hid');$('devBox').classList.remove('hid');$('devSt').textContent=tr('waiting_approval');
     devCancel=false;let iv=(d.interval||5)*1000;const end=Date.now()+d.expires_in*1000;
     const poll=async()=>{
       if(devCancel)return;
-      if(Date.now()>end){endDev('انتهت صلاحية الرمز، حاول مرة أخرى');return}
+      if(Date.now()>end){endDev(tr('code_expired'));return}
       try{
         const r=await form('https://github.com/login/oauth/access_token',{client_id:cid(),device_code:d.device_code,grant_type:'urn:ietf:params:oauth:grant-type:device_code'});
         if(r.access_token){endDev();await login(r.access_token);return}
         if(r.error==='slow_down')iv+=5000;
-        else if(r.error&&r.error!=='authorization_pending'){endDev(r.error==='access_denied'?'تم رفض الطلب':(r.error_description||r.error));return}
+        else if(r.error&&r.error!=='authorization_pending'){endDev(r.error==='access_denied'?tr('denied'):(r.error_description||r.error));return}
       }catch(e){}
       if(!devCancel)devTimer=setTimeout(poll,iv);
     };
     devTimer=setTimeout(poll,iv);
   }catch(e){
-    $('e1').textContent='تعذّر بدء الدخول: '+e.message;
+    $('e1').textContent=tr('start_fail')+e.message;
     if(!CLIENT_ID_DEFAULT){store.del('gh_cid');$('mainLogin').classList.add('hid');$('cidBox').classList.remove('hid')}
   }
 }
@@ -254,8 +369,8 @@ async function kvSet(k,v){store.set(k,v);if(PREF){try{await PREF.set({key:k,valu
 async function kvDel(k){store.del(k);if(PREF){try{await PREF.remove({key:k})}catch(e){}}}
 var pendingToken='';
 async function login(t,silent){
-  token=(typeof t==='string'?t:$('tok').value).trim();$('e1').textContent='جاري التحقق...';$('retryBox').classList.add('hid');
-  if(!token){$('e1').textContent='أدخل التوكن';return}
+  token=(typeof t==='string'?t:$('tok').value).trim();$('e1').textContent=tr('verifying');$('retryBox').classList.add('hid');
+  if(!token){$('e1').textContent=tr('enter_token');return}
   let lastErr=null;
   for(let i=0;i<(silent?4:1);i++){
     try{
@@ -268,9 +383,9 @@ async function login(t,silent){
     }
   }
   user=null;go(1);
-  if(lastErr&&lastErr.status===401){token='';await kvDel('gh_token');$('e1').textContent='انتهت صلاحية الدخول، سجّل دخولك من جديد'}
-  else if(silent){pendingToken=token;token='';$('retryBox').classList.remove('hid');$('e1').textContent='تعذّر الاتصال بـ GitHub، تحقق من الإنترنت'}
-  else{token='';$('e1').textContent='فشل الدخول: '+(lastErr&&lastErr.message)}
+  if(lastErr&&lastErr.status===401){token='';await kvDel('gh_token');$('e1').textContent=tr('session_expired')}
+  else if(silent){pendingToken=token;token='';$('retryBox').classList.remove('hid');$('e1').textContent=tr('no_conn')}
+  else{token='';$('e1').textContent=tr('login_fail')+(lastErr&&lastErr.message)}
 }
 function retryLogin(){if(pendingToken)login(pendingToken,true)}
 function logout(){endDev();kvDel('gh_token');user=null;token='';pendingToken='';repos=[];$('tok').value='';go(1)}
@@ -294,7 +409,7 @@ function fillRepos(){
 var target=null;
 function pickKind(k){
   kind=k;pickedFile=null;try{$('zip').value=''}catch(e){}showPicked(null);
-  $('upTitle').textContent=k==='app'?'رفع تطبيق':'نشر موقع HTML';
+  setUpTitle();
   $('apkOpt').classList.toggle('hid',k!=='app');
   $('privOpt').classList.toggle('hid',k==='site');$('pubNote').classList.toggle('hid',k!=='site');
   $('e4').textContent='';$('log').textContent='';$('bar').classList.add('hid');
@@ -304,7 +419,7 @@ async function setMode(m){
   mode=m;$('segNew').classList.toggle('on',m==='new');$('segUpd').classList.toggle('on',m==='update');
   $('newBox').classList.toggle('hid',m!=='new');$('updBox').classList.toggle('hid',m!=='update');
   if(m==='update'&&!repos.length){
-    $('repoSel').innerHTML='<p class="mu">جاري التحميل...</p>';
+    $('repoSel').innerHTML='<p class="mu">'+tr('loading')+'</p>';
     try{await loadRepos()}catch(e){$('e4').textContent=e.message}
   }
   if(m==='update')fillRepos();
@@ -322,7 +437,7 @@ function detect(paths){
   if(p=f(/(^|\/)pubspec\.yaml$/))return{t:'flutter',dir:dirOf(p),label:'Flutter'};
   if(p=f(/(^|\/)capacitor\.config\.(json|ts|js)$/))return{t:'cap',dir:dirOf(p),label:'Capacitor'};
   if(p=f(/(^|\/)settings\.gradle(\.kts)?$/))return{t:'android',dir:dirOf(p),label:'Android (Gradle)'};
-  if(p=f(/(^|\/)index\.html$/))return{t:'web',dir:dirOf(p),label:'ويب (HTML)'};
+  if(p=f(/(^|\/)index\.html$/))return{t:'web',dir:dirOf(p),label:'Web (HTML)'};
   return null;
 }
 function workflow(d){
@@ -408,37 +523,37 @@ jobs:
 async function upload(){
   $('e4').textContent='';$('log').textContent='';
   const err=m=>{$('e4').textContent=m};
-  if(mode==='update'){if(!sel)return err('اختر المشروع من القائمة');target=repos.find(r=>r.full_name===sel)}
-  else{const nm=$('newName').value.trim();if(!/^[A-Za-z0-9._-]+$/.test(nm))return err('اسم المشروع غير صالح: أحرف إنجليزية وأرقام و - _ . فقط');target={name:nm,newRepo:true}}
+  if(mode==='update'){if(!sel)return err(tr('pick_repo'));target=repos.find(r=>r.full_name===sel)}
+  else{const nm=$('newName').value.trim();if(!/^[A-Za-z0-9._-]+$/.test(nm))return err(tr('bad_name'));target={name:nm,newRepo:true}}
   zipFile=pickedFile||$('zip').files[0];
-  if(!zipFile)return err(kind==='site'?'اختر ملف ZIP أو HTML أولاً':'اختر ملف ZIP أولاً');
+  if(!zipFile)return err(kind==='site'?tr('pick_zip_site'):tr('pick_zip'));
   const isHtml=/\.html?$/i.test(zipFile.name||'');
-  if(isHtml&&kind!=='site')return err('هذا ملف HTML، اختر ملف ZIP للتطبيق');
+  if(isHtml&&kind!=='site')return err(tr('html_for_app'));
   $('upBtn').disabled=true;$('bar').classList.remove('hid');prog(0);hasBuild=false;await ensureNotif();
   try{
-    log('قراءة الملف...');
+    log(tr('reading'));
     let z;
     if(isHtml){const b64=await fileToB64(zipFile);z={files:{'index.html':{dir:false,async:async()=>b64}}}}
     else z=await JSZip.loadAsync(zipFile);
     let names=Object.keys(z.files).filter(n=>!z.files[n].dir&&!/(^|\/)(__MACOSX|\.DS_Store)(\/|$)/.test(n)&&!n.startsWith('.git/'));
-    if(!names.length)throw new Error('الملف فارغ');
+    if(!names.length)throw new Error(tr('empty_zip'));
     const roots=new Set(names.map(n=>n.split('/')[0]));
     const strip=(roots.size===1&&names.every(n=>n.includes('/')))?[...roots][0]+'/':'';
     const outP=n=>strip?n.slice(strip.length):n;
-    log(`${names.length} ملف`);
+    log(tr('n_files',{n:names.length}));
     let renameFrom=null;
     if(kind==='site'){
       const ps=names.map(outP);
       if(!ps.includes('index.html')){
         const h=ps.filter(x=>/^[^/]+\.html?$/i.test(x));
         if(h.length===1)renameFrom=names[ps.indexOf(h[0])];
-        else throw new Error('لم أجد ملف index.html في المشروع');
+        else throw new Error(tr('no_index'));
       }
     }
 
     let repo=target;
     if(target.newRepo){
-      log('إنشاء المشروع...');
+      log(tr('creating'));
       repo=await gh('/user/repos',{method:'POST',body:JSON.stringify({name:target.name,private:kind==='site'?false:$('priv').checked,auto_init:true})});
     }
     const full=repo.full_name,branch=repo.default_branch||'main';
@@ -446,13 +561,13 @@ async function upload(){
     let ref;
     try{ref=await gh(`/repos/${full}/git/ref/heads/${branch}`)}
     catch(e){
-      log('مشروع فارغ، تهيئة...');
+      log(tr('empty_repo'));
       await gh(`/repos/${full}/contents/.gitkeep`,{method:'PUT',body:JSON.stringify({message:'init',content:''})});
       ref=await gh(`/repos/${full}/git/ref/heads/${branch}`);
     }
     const base=ref.object.sha;
 
-    log('رفع الملفات...');
+    log(tr('uploading'));
     const tree=[];let done=0,i=0;
     async function worker(){
       while(i<names.length){
@@ -461,7 +576,7 @@ async function upload(){
         let blob,tries=0;
         while(true){
           try{blob=await gh(`/repos/${full}/git/blobs`,{method:'POST',body:JSON.stringify({content:b64,encoding:'base64'})});break}
-          catch(e){if(++tries>3)throw new Error(`فشل رفع ${n}: ${e.message}`);await new Promise(r=>setTimeout(r,1000*tries))}
+          catch(e){if(++tries>3)throw new Error(tr('upload_fail_file',{n:n})+e.message);await new Promise(r=>setTimeout(r,1000*tries))}
         }
         tree.push({path:n===renameFrom?'index.html':outP(n),mode:'100644',type:'blob',sha:blob.sha});
         prog(Math.round(++done/names.length*85));
@@ -478,20 +593,20 @@ async function upload(){
       hasBuild=names.some(n=>/(^|\/)\.github\/workflows\//.test(n));
       if($('autoapk').checked){
         const paths=names.map(outP);
-        if(paths.some(x=>x.startsWith('.github/workflows/')))log('يوجد ملف بناء في المشروع، تُرك كما هو');
+        if(paths.some(x=>x.startsWith('.github/workflows/')))log(tr('wf_exists'));
         else{
           const d=detect(paths);
           if(d){
             const yml=workflow(d);
             const bl=await gh(`/repos/${full}/git/blobs`,{method:'POST',body:JSON.stringify({content:btoa(unescape(encodeURIComponent(yml))),encoding:'base64'})});
             tree.push({path:'.github/workflows/build-apk.yml',mode:'100644',type:'blob',sha:bl.sha});
-            hasBuild=true;log(`نوع المشروع: ${d.label} — أُضيف ملف بناء APK`);
-          }else log('لم أتعرف على نوع المشروع، لم يُضف بناء APK');
+            hasBuild=true;log(tr('proj_type',{l:d.label}));
+          }else log(tr('no_type'));
         }
       }
     }
 
-    log('بناء الإصدار...');
+    log(tr('building_release'));
     const body={tree};
     if(!$('replace').checked&&!target.newRepo)body.base_tree=base;
     else if(target.newRepo)body.base_tree=base;
@@ -503,7 +618,7 @@ async function upload(){
 
     let pagesErr='',siteUrl='';
     if(kind==='site'){
-      log('تفعيل الاستضافة...');
+      log(tr('enabling_pages'));
       try{await gh(`/repos/${full}/pages`,{method:'POST',body:JSON.stringify({source:{branch,path:'/'}})})}
       catch(e){if(e.status!==409&&e.status!==422)pagesErr=e.message||('HTTP '+e.status)}
       const [o,nm]=full.split('/');
@@ -531,9 +646,9 @@ async function ensureNotif(){
     if(p.display!=='granted')p=await LN.requestPermissions();
     notifOK=p.display==='granted';
     if(notifOK){
-      await LN.createChannel({id:'build',name:'حالة البناء',importance:2,vibration:false});
-      await LN.createChannel({id:'result',name:'نتيجة البناء',importance:4,vibration:true});
-      await LN.registerActionTypes({types:[{id:'OK',actions:[{id:'download',title:'تحميل التطبيق'}]},{id:'FAIL',actions:[{id:'copy',title:'نسخ الخلل'}]},{id:'SITE',actions:[{id:'open',title:'فتح الموقع'}]}]});
+      await LN.createChannel({id:'build',name:tr('ch_status'),importance:2,vibration:false});
+      await LN.createChannel({id:'result',name:tr('ch_result'),importance:4,vibration:true});
+      await LN.registerActionTypes({types:[{id:'OK',actions:[{id:'download',title:tr('act_download')}]},{id:'FAIL',actions:[{id:'copy',title:tr('act_copy')}]},{id:'SITE',actions:[{id:'open',title:tr('act_open')}]}]});
     }
   }catch(e){}
 }
@@ -543,13 +658,15 @@ if(LN)Promise.resolve(LN.addListener('localNotificationActionPerformed',async e=
   const ex=(e.notification&&e.notification.extra)||{};
   if(e.actionId==='download'&&ex.url)downloadApk(ex.url);
   else if(e.actionId==='open'&&ex.url)window.open(ex.url,'_blank');
-  else if(e.actionId==='copy'){await sleep(700);const ok=await copyText(lastErr||store.get('last_err')||'');toast(ok?'تم نسخ الخلل':'تعذّر النسخ')}
+  else if(e.actionId==='copy'){await sleep(700);const ok=await copyText(lastErr||store.get('last_err')||'');toast(tr(ok?'copied_err':'copy_fail'))}
 })).catch(()=>{});
 function setBS(kind,title,sub){
   const el=$('bs');el.className='bs '+kind;
   el.innerHTML=(kind==='run'?'<div class="sp"></div>':'<div class="tile">'+ic(kind==='ok'?'check':'alert')+'</div>')+`<div><b>${title}</b><small>${sub||''}</small></div>`;
 }
+function bsT(kd,tk,sk,v){lastBS=[kd,tk,sk,v];setBS(kd,tr(tk,v),sk?tr(sk,v):'')}
 function apkReady(ok,hide){
+  apkOk=!!ok;apkHide=!!hide;
   const b=$('apkBtn'),r=$('apkRow');
   b.classList.toggle('dis',!ok);b.classList.toggle('hid',!!hide);
   if(ok)b.href=APKURL;else b.removeAttribute('href');
@@ -563,20 +680,20 @@ function buildLogText(head,log){
 }
 var dlBusy=false;
 var FS=plug('Filesystem'),FO=plug('FileOpener');
-function setDl(p,txt){$('dbar').classList.toggle('hid',p===null);if(p!==null)$('dbi').style.width=p+'%';$('apkLbl').textContent=txt||'تحميل التطبيق (APK)'}
+function setDl(p,txt){$('dbar').classList.toggle('hid',p===null);if(p!==null)$('dbi').style.width=p+'%';$('apkLbl').textContent=txt||tr('apk_dl')}
 async function downloadApk(url){
   url=url||APKURL;
   if(!NATIVE){window.open(url,'_blank');return}
   if(dlBusy)return;dlBusy=true;let h;
   try{
-    setDl(0,'جاري التحميل...');
-    h=await FS.addListener('progress',e=>{if(e.contentLength>0){const q=Math.round(e.bytes/e.contentLength*100);setDl(q,`جاري التحميل ${q}%`)}});
+    setDl(0,tr('dl_progress'));
+    h=await FS.addListener('progress',e=>{if(e.contentLength>0){const q=Math.round(e.bytes/e.contentLength*100);setDl(q,tr('dl_pct',{p:q}))}});
     await FS.downloadFile({url,path:'app-update.apk',directory:'CACHE',progress:true});
     const u=await FS.getUri({path:'app-update.apk',directory:'CACHE'});
-    setDl(100,'جاري فتح المثبّت...');
+    setDl(100,tr('opening_installer'));
     await FO.open({filePath:u.uri,contentType:'application/vnd.android.package-archive',openWithDefault:true});
-    toast('اضغط «تثبيت». وإن طلب الهاتف السماح فعّله ثم أعد الضغط');
-  }catch(e){toast('تعذّر التحميل داخل التطبيق، سيفتح المتصفح');window.open(url,'_blank')}
+    toast(tr('install_hint'));
+  }catch(e){toast(tr('dl_fail'));window.open(url,'_blank')}
   finally{try{h&&h.remove()}catch(e){}setTimeout(()=>{setDl(null);dlBusy=false},1200)}
 }
 $('apkBtn').addEventListener('click',e=>{if(NATIVE&&kind==='app'){e.preventDefault();downloadApk()}});
@@ -585,17 +702,17 @@ async function copyText(t){
   try{await navigator.clipboard.writeText(t);return true}catch{}
   try{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();const ok=document.execCommand('copy');a.remove();return ok}catch{return false}
 }
-function renderFail(full,text,openUrl,what,sub){
-  setBS('err','فشل '+what,sub||'');
+function renderFail(full,text,openUrl,whatKey,subKey,subVars){
+  bsT('err','failed',subKey,Object.assign({x:tr(whatKey)},subVars||{}));
   apkReady(false);
-  $('bsx').innerHTML=`<pre class="logv" id="logv"></pre><div class="row"><button class="btn" id="cpLog">${ic('copy')}<span>نسخ سجل الخطأ</span></button><a class="btn sec" target="_blank" rel="noopener" href="${openUrl}">${ic('ext')}<span>فتح على GitHub</span></a></div>`;
+  $('bsx').innerHTML=`<pre class="logv" id="logv"></pre><div class="row"><button class="btn" id="cpLog">${ic('copy')}<span data-i18n="copy_log">${tr('copy_log')}</span></button><a class="btn sec" target="_blank" rel="noopener" href="${openUrl}">${ic('ext')}<span data-i18n="open_gh">${tr('open_gh')}</span></a></div>`;
   $('logv').textContent=text;lastErr=text;store.set('last_err',text);
-  endNotif();notify({id:1003,title:'فشل '+what,body:full,channelId:'result',actionTypeId:'FAIL'});
-  $('cpLog').onclick=async()=>{const ok=await copyText(text);toast(ok?'تم نسخ الخلل':'تعذّر النسخ');const b=$('cpLog');b.innerHTML=ic(ok?'check':'alert')+`<span>${ok?'تم النسخ':'تعذّر النسخ، حدّد النص يدوياً'}</span>`;setTimeout(()=>b.innerHTML=ic('copy')+'<span>نسخ سجل الخطأ</span>',2000)};
+  endNotif();notify({id:1003,title:tr('failed',{x:tr(whatKey)}),body:full,channelId:'result',actionTypeId:'FAIL'});
+  $('cpLog').onclick=async()=>{const ok=await copyText(text);toast(tr(ok?'copied_err':'copy_fail'));const b=$('cpLog');b.innerHTML=ic(ok?'check':'alert')+`<span>${tr(ok?'copied':'copy_manual')}</span>`;setTimeout(()=>b.innerHTML=ic('copy')+`<span data-i18n="copy_log">${tr('copy_log')}</span>`,2000)};
 }
 async function showFail(full,run){
-  setBS('err','فشل البناء','جاري قراءة سجل الخطأ...');
-  let head=`Build failed: ${full}\nWorkflow: ${run.name}\nRun: ${run.html_url}\n`,text=head,sub='';
+  bsT('err','build_failed','reading_log');
+  let head=`Build failed: ${full}\nWorkflow: ${run.name}\nRun: ${run.html_url}\n`,text=head,subKey='',subVars=null;
   try{
     const jobs=(await gh(`/repos/${full}/actions/runs/${run.id}/jobs`)).jobs||[];
     const job=jobs.find(j=>j.conclusion==='failure')||jobs[0];
@@ -606,17 +723,17 @@ async function showFail(full,run){
     try{const r=await fetch(`https://api.github.com/repos/${full}/actions/jobs/${job.id}/logs`,{headers:{Authorization:'Bearer '+token}});if(r.ok)log=await r.text()}catch(e){}
     if(log)text=buildLogText(head,log);
     else{try{const an=await gh(`/repos/${full}/check-runs/${job.id}/annotations`);text=head+'\n'+an.map(a=>`${a.annotation_level}: ${a.message}`).join('\n')}catch(e){}}
-    sub=step?`في الخطوة: ${step.name}`:'';
-  }catch(e){sub='تعذّر قراءة السجل'}
-  renderFail(full,text,run.html_url,'بناء التطبيق',sub);
+    if(step){subKey='in_step';subVars={s:step.name}}
+  }catch(e){subKey='log_fail'}
+  renderFail(full,text,run.html_url,'what_build',subKey,subVars);
 }
 async function watchSite(full,sha,pagesErr){
   const id=++watchId,t0=Date.now();
   nCancel([1002,1003]);
-  if(pagesErr){renderFail(full,'Pages setup failed: '+full+'\n'+pagesErr+'\nالاستضافة المجانية تتطلب مشروعاً عاماً (Public).','https://github.com/'+full+'/settings/pages','نشر الموقع','تعذّر تفعيل الاستضافة');return}
-  setBS('run','جاري نشر الموقع','يستغرق عادةً أقل من دقيقتين');apkReady(false);
-  useBM=await bmStart(full,'جاري نشر الموقع');
-  const bn=b=>useBM?bmSet(b,'جاري نشر الموقع'):notify({id:1001,title:'جاري نشر الموقع',body:b,channelId:'build',ongoing:true,autoCancel:false});
+  if(pagesErr){renderFail(full,'Pages setup failed: '+full+'\n'+pagesErr+'\n'+tr('pub_note'),'https://github.com/'+full+'/settings/pages','what_site','pages_enable_fail');return}
+  bsT('run','publishing','publish_eta');apkReady(false);
+  useBM=await bmStart(full,tr('publishing'));
+  const bn=b=>useBM?bmSet(b,tr('publishing')):notify({id:1001,title:tr('publishing'),body:b,channelId:'build',ongoing:true,autoCancel:false});
   if(!useBM)bn(full);
   while(id===watchId){
     await sleep(5000);if(id!==watchId)return;
@@ -624,19 +741,19 @@ async function watchSite(full,sha,pagesErr){
     let b=null;try{b=await gh(`/repos/${full}/pages/builds/latest`)}catch(e){}
     const mine=b&&(!b.commit||b.commit===sha||sec>60);
     if(b&&mine&&b.status==='built'){
-      setBS('ok','تم نشر الموقع','قد يحتاج ظهوره دقيقة إضافية');apkReady(true);
-      endNotif();notify({id:1002,title:'تم نشر موقعك',body:APKURL,channelId:'result',actionTypeId:'SITE',extra:{url:APKURL}});return;
+      bsT('ok','site_done','site_done_sub');apkReady(true);
+      endNotif();notify({id:1002,title:tr('site_published'),body:APKURL,channelId:'result',actionTypeId:'SITE',extra:{url:APKURL}});return;
     }
     if(b&&mine&&b.status==='errored'){
-      renderFail(full,'Pages build failed: '+full+'\n'+((b.error&&b.error.message)||'unknown error'),'https://github.com/'+full+'/actions','نشر الموقع','فشل بناء الصفحات');return;
+      renderFail(full,'Pages build failed: '+full+'\n'+((b.error&&b.error.message)||'unknown error'),'https://github.com/'+full+'/actions','what_site','pages_build_fail');return;
     }
-    if(sec>600){endNotif();setBS('err','النشر يستغرق وقتاً طويلاً','تحقق من إعدادات Pages في المشروع');return}
-    setBS('run','جاري نشر الموقع',`الوقت المنقضي ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`);
+    if(sec>600){endNotif();bsT('err','publish_slow','check_pages');return}
+    bsT('run','publishing','elapsed',{t:Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0')});
   }
 }
 var BM=plug('BackgroundMode');
 var useBM=false;
-function bmSet(text,title){return BM?BM.setSettings({title:title||'جاري بناء التطبيق',text:text,channelName:'حالة البناء',channelDescription:'متابعة البناء والنشر',color:'4f6bff',resume:true,hidden:false,silent:false,disableWebViewOptimization:true}).catch(function(){}):Promise.resolve()}
+function bmSet(text,title){return BM?BM.setSettings({title:title||tr('building'),text:text,channelName:tr('ch_status'),channelDescription:tr('bm_desc'),color:'4f6bff',resume:true,hidden:false,silent:false,disableWebViewOptimization:true}).catch(function(){}):Promise.resolve()}
 async function bmStart(full,title){
   if(!BM)return false;
   try{
@@ -656,10 +773,10 @@ async function resumePending(){
 
 async function watchBuild(full,sha){
   const id=++watchId,t0=Date.now(),limit=hasBuild?240:45;
-  setBS('run','جاري بناء التطبيق','قد يستغرق 5 إلى 8 دقائق');apkReady(false);
+  bsT('run','building','build_eta');apkReady(false);
   nCancel([1002,1003]);let lastMin=-1;
   useBM=await bmStart(full);
-  const bn=(b)=>useBM?bmSet(b):notify({id:1001,title:'جاري بناء التطبيق',body:b,channelId:'build',ongoing:true,autoCancel:false});if(!useBM)bn(full);
+  const bn=(b)=>useBM?bmSet(b):notify({id:1001,title:tr('building'),body:b,channelId:'build',ongoing:true,autoCancel:false});if(!useBM)bn(full);
   while(id===watchId){
     await sleep(7000);if(id!==watchId)return;
     const sec=Math.floor((Date.now()-t0)/1000);
@@ -668,46 +785,52 @@ async function watchBuild(full,sha){
     if(!runs.length){
       if(sec>limit){
         endNotif();
-        if(hasBuild)setBS('err','لم يبدأ البناء','تأكد أن GitHub Actions مفعّل في المشروع');
-        else{setBS('ok','تم الرفع','لا يوجد بناء تلقائي لهذا المشروع');apkReady(false,true)}
+        if(hasBuild)bsT('err','build_not_started','check_actions');
+        else{bsT('ok','uploaded','no_auto_build');apkReady(false,true)}
         return;
       }
       continue;
     }
     if(runs.some(x=>x.status!=='completed')){
-      if(sec>2400){endNotif();setBS('err','البناء يستغرق وقتاً طويلاً','تابعه من صفحة Actions');return}
-      const mn=Math.floor(sec/60);if(mn!==lastMin){lastMin=mn;bn(`${full} · ${mn} د`)}
-      setBS('run','جاري بناء التطبيق',`الوقت المنقضي ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`);continue;
+      if(sec>2400){endNotif();bsT('err','build_slow','follow_actions');return}
+      const mn=Math.floor(sec/60);if(mn!==lastMin){lastMin=mn;bn(`${full} · ${tr('n_min',{m:mn})}`)}
+      bsT('run','building','elapsed',{t:Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0')});continue;
     }
     const bad=runs.find(x=>x.conclusion!=='success'&&x.conclusion!=='skipped');
-    if(!bad){setBS('ok','اكتمل البناء','التطبيق جاهز للتحميل');apkReady(true);endNotif();notify({id:1002,title:'اكتمل بناء التطبيق',body:full,channelId:'result',actionTypeId:'OK',extra:{url:APKURL}});return}
+    if(!bad){bsT('ok','build_done','app_ready');apkReady(true);endNotif();notify({id:1002,title:tr('build_done_n'),body:full,channelId:'result',actionTypeId:'OK',extra:{url:APKURL}});return}
     await showFail(full,bad);return;
   }
 }
 
+function renderDoneUI(info){
+  const full=info.full,kd=info.kind||'app';
+  const items=[];
+  if(kd==='app'){
+    APKURL=`https://github.com/${full}/releases/latest/download/app.apk`;
+    $('apkBtn').innerHTML=ic('download')+`<span id="apkLbl">${tr('apk_dl')}</span>`;
+    items.push(['phone',tr('dl_apk_direct'),tr('dl_apk_direct_d'),APKURL,1]);
+    items.push(['download',tr('dl_zip'),'',`https://github.com/${full}/archive/refs/heads/${info.branch}.zip`]);
+    items.push(['activity',tr('follow_build'),'Actions',`https://github.com/${full}/actions`]);
+  }else{
+    APKURL=info.siteUrl;
+    $('apkBtn').innerHTML=ic('globe')+`<span id="apkLbl">${tr('open_site')}</span>`;
+    items.push(['globe',tr('your_site'),tr('site_soon'),APKURL,1]);
+  }
+  items.push(['repo',tr('repo_page'),'',`https://github.com/${full}`]);
+  $('links').innerHTML=items.map(([i,t,sb,u,m])=>`<div class="lk${m?' main':''}"><div class="tile">${ic(i)}</div><div class="tx"><b>${t}</b>${sb?`<small>${sb}</small>`:''}<a class="u" target="_blank" rel="noopener" href="${u}">${u}</a></div><div class="act"><button class="ib" data-u="${u}" aria-label="${tr('aria_copy')}">${ic('copy')}</button><a class="ib" target="_blank" rel="noopener" href="${u}" aria-label="${tr('aria_open')}">${ic('ext')}</a></div></div>`).join('');
+  $('links').querySelectorAll('button[data-u]').forEach(b=>b.onclick=()=>{
+    try{navigator.clipboard.writeText(b.dataset.u)}catch{}
+    b.innerHTML=ic('check');setTimeout(()=>b.innerHTML=ic('copy'),1500)});
+  $('note').textContent=info.priv&&kd==='app'?tr('private_note'):full;
+  const ar=$('links').querySelector('.lk.main');if(ar)ar.id='apkRow';
+  apkReady(apkOk,apkHide);
+}
 function showDone(info,resumed){
   const full=info.full,kd=info.kind||'app';kind=kd;
   if(!resumed)kvSet('pending_build',JSON.stringify(Object.assign({t:Date.now()},info)));
   $('bsx').innerHTML='';
-  const items=[];
-  if(kd==='app'){
-    APKURL=`https://github.com/${full}/releases/latest/download/app.apk`;
-    $('apkBtn').innerHTML=ic('download')+'<span id="apkLbl">تحميل التطبيق (APK)</span>';
-    items.push(['phone','تحميل APK مباشر','يعمل بعد انتهاء البناء (نحو 5 دقائق)',APKURL,1]);
-    items.push(['download','تحميل المشروع (ZIP)','',`https://github.com/${full}/archive/refs/heads/${info.branch}.zip`]);
-    items.push(['activity','متابعة البناء','Actions',`https://github.com/${full}/actions`]);
-  }else{
-    APKURL=info.siteUrl;
-    $('apkBtn').innerHTML=ic('globe')+'<span id="apkLbl">فتح الموقع</span>';
-    items.push(['globe','رابط موقعك','يظهر خلال دقيقة أو دقيقتين',APKURL,1]);
-  }
-  items.push(['repo','صفحة المشروع','',`https://github.com/${full}`]);
-  $('links').innerHTML=items.map(([i,t,sb,u,m])=>`<div class="lk${m?' main':''}"><div class="tile">${ic(i)}</div><div class="tx"><b>${t}</b>${sb?`<small>${sb}</small>`:''}<a class="u" target="_blank" rel="noopener" href="${u}">${u}</a></div><div class="act"><button class="ib" data-u="${u}" aria-label="نسخ">${ic('copy')}</button><a class="ib" target="_blank" rel="noopener" href="${u}" aria-label="فتح">${ic('ext')}</a></div></div>`).join('');
-  $('links').querySelectorAll('button[data-u]').forEach(b=>b.onclick=()=>{
-    try{navigator.clipboard.writeText(b.dataset.u)}catch{}
-    b.innerHTML=ic('check');setTimeout(()=>b.innerHTML=ic('copy'),1500)});
-  $('note').textContent=info.priv&&kd==='app'?'المشروع خاص: الروابط تعمل لحسابك فقط':full;
-  const ar=$('links').querySelector('.lk.main');if(ar){ar.id='apkRow';ar.classList.add('off')}
+  doneInfo=info;apkOk=false;apkHide=false;
+  renderDoneUI(info);
   go(4);
   if(kd==='app')watchBuild(full,info.sha);else watchSite(full,info.sha,info.pagesErr);
 }
@@ -715,17 +838,17 @@ var pickedFile=null;
 var FP=plug('FilePicker');
 async function showPicked(f){
   $('e4').textContent='';$('drop').classList.toggle('has',!!f);
-  if(!f){$('zname').textContent=kind==='site'?'اضغط لاختيار ملف ZIP أو HTML':'اضغط لاختيار ملف ZIP';return}
+  if(!f){$('zname').textContent=tr(kind==='site'?'zip_site':'zip_app');return}
   $('zname').textContent=`${f.name} (${(f.size/1048576).toFixed(1)} MB)`;
   if(kind==='site'&&/\.html?$/i.test(f.name||''))return;
-  try{const b=new Uint8Array(await f.slice(0,2).arrayBuffer());if(b[0]!==0x50||b[1]!==0x4B)$('e4').textContent='هذا الملف ليس ZIP صالحاً'}
-  catch(e){$('e4').textContent='تعذّرت قراءة الملف، جرّب اختياره مرة أخرى'}
+  try{const b=new Uint8Array(await f.slice(0,2).arrayBuffer());if(b[0]!==0x50||b[1]!==0x4B)$('e4').textContent=tr('not_zip')}
+  catch(e){$('e4').textContent=tr('read_fail_retry')}
 }
 async function onPick(){pickedFile=null;await showPicked($('zip').files[0])}
 $('zip').addEventListener('change',onPick);$('zip').addEventListener('input',onPick);
 var pickData=false;
 async function nativePick(){
-  if(!FP){$('e4').textContent='مكوّن اختيار الملفات غير متوفر في هذا الإصدار';return}
+  if(!FP){$('e4').textContent=tr('no_picker');return}
   try{
     const r=await FP.pickFiles({limit:1,readData:pickData});
     const f=r.files&&r.files[0];if(!f)return;
@@ -744,13 +867,16 @@ async function nativePick(){
   }catch(e){
     const msg=String((e&&e.message)||e);
     if(/cancel/i.test(msg))return;
-    if(!pickData){pickData=true;$('e4').textContent='تعذّرت القراءة ('+msg+')، اضغط مرة ثانية'}
-    else $('e4').textContent='تعذّرت قراءة الملف: '+msg;
+    if(!pickData){pickData=true;$('e4').textContent=tr('read_retry',{m:msg})}
+    else $('e4').textContent=tr('file_read_fail')+msg;
   }
 }
 if(NATIVE){$('zip').classList.add('hid');$('drop').addEventListener('click',nativePick)}
 go(1);
-// دخول تلقائي
+applyLang();
+// language saved in native Preferences (in case localStorage was cleared)
+(async()=>{const v=await kvGet('lang');if(v&&v!==langPref&&(v==='auto'||LANGS.indexOf(v)>=0)){langPref=v;applyLang()}})();
+// auto sign-in
 (async()=>{const saved=await kvGet('gh_token');if(saved)login(saved,true)})();
 </script>
 </body>
