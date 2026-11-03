@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0d12">
+<title>رافع GitHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{--sp:#ff2e5b;--bg:#f4f5f8;--card:#fff;--tx:#12151c;--mu:#6a7282;--pr:#4f6bff;--pr2:#7c5cff;--bd:#e5e8ee;--in:#f4f5f8;--ok:#13a15a;--er:#e0364b;--sh:0 1px 2px rgba(16,24,40,.04),0 8px 24px rgba(16,24,40,.06)}
+@media(prefers-color-scheme:dark){:root{--bg:#0b0d12;--card:#141821;--tx:#eceef3;--mu:#8d96a7;--bd:#232937;--in:#0f1219;--sh:0 8px 24px rgba(0,0,0,.35)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;background:radial-gradient(900px 400px at 100% -10%,rgba(79,107,255,.14),transparent 60%),radial-gradient(700px 360px at 0% 0%,rgba(124,92,255,.10),transparent 60%),var(--bg);color:var(--tx);font-family:Tajawal,system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;line-height:1.65}
+main{max-width:520px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px 32px}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;display:grid;place-items:center;box-shadow:0 6px 16px rgba(79,107,255,.35)}
+.logo .ic{width:23px;height:23px}
+h1{font-size:1.15rem;font-weight:800;margin:0;line-height:1.2}
+.sub{margin:2px 0 0;font-size:.8rem;color:var(--mu)}
+.steps{display:flex;gap:6px;margin:0 0 16px}
+.steps i{flex:1;height:4px;border-radius:4px;background:var(--bd);transition:.3s}
+.steps i.on{background:linear-gradient(90deg,var(--pr),var(--pr2))}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:20px;margin-bottom:14px;box-shadow:var(--sh)}
+.card h2{font-size:1.05rem;font-weight:800;margin:0 0 4px}
+.mu{color:var(--mu);font-size:.88rem;margin:4px 0 14px}
+input[type=text],input[type=password],input:not([type]){width:100%;padding:14px;border-radius:13px;border:1px solid var(--bd);background:var(--in);color:var(--tx);font:inherit;margin:6px 0 10px;outline:0;transition:.2s}
+input:focus{border-color:var(--pr);box-shadow:0 0 0 4px rgba(79,107,255,.15)}
+button{font:inherit}
+.btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border:0;border-radius:13px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;font-weight:700;margin-top:8px;box-shadow:0 6px 16px rgba(79,107,255,.3);transition:.15s}
+.btn:active{transform:scale(.98)}
+.btn.sec{background:transparent;color:var(--tx);border:1px solid var(--bd);box-shadow:none}
+.btn:disabled{opacity:.55}
+.row{display:flex;gap:10px}.row .btn{flex:1}
+.ib{width:38px;height:38px;border-radius:11px;border:1px solid var(--bd);background:var(--in);color:var(--tx);display:grid;place-items:center;text-decoration:none;padding:0}
+.hid{display:none!important}
+.hact{display:flex;gap:8px;align-items:center}
+.ib.hrt{color:var(--sp);border-color:rgba(255,46,91,.38);background:rgba(255,46,91,.08)}
+.sup{display:flex;gap:12px;align-items:center;padding:12px 14px;margin-top:14px;border:1px solid rgba(255,46,91,.35);background:rgba(255,46,91,.07);border-radius:15px;color:var(--tx);text-decoration:none;transition:.15s}
+.sup:active{transform:scale(.98)}
+.sup .tile{width:42px;height:42px;background:rgba(255,46,91,.14);color:var(--sp)}
+.sup .tx{flex:1;min-width:0}
+.sup b{display:block;font-size:.95rem}
+.sup small{display:block;color:var(--mu);font-size:.8rem}
+.sup>.ic{color:var(--sp)}
+.modes{display:grid;gap:10px;margin-top:6px}
+.mode{display:flex;gap:14px;align-items:center;text-align:right;width:100%;padding:16px;border-radius:16px;border:1px solid var(--bd);background:var(--in);color:var(--tx);transition:.15s}
+.mode:active{transform:scale(.98);border-color:var(--pr)}
+.tile{width:46px;height:46px;border-radius:13px;background:rgba(79,107,255,.12);color:var(--pr);display:grid;place-items:center;flex:none}
+.mode b{display:block;font-size:1rem}.mode small{color:var(--mu);font-size:.82rem}
+.who{display:flex;gap:12px;align-items:center}
+.who img{width:46px;height:46px;border-radius:50%;border:2px solid var(--bd)}
+.list{max-height:290px;overflow:auto;display:grid;gap:8px;margin:8px 0 6px}
+.repo{display:flex;gap:10px;align-items:center;width:100%;padding:12px 14px;border-radius:13px;border:1px solid var(--bd);background:var(--in);color:var(--tx);text-align:right;direction:ltr;justify-content:flex-start}
+.repo span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.repo.on{border-color:var(--pr);background:rgba(79,107,255,.1);color:var(--pr)}
+.opt{display:flex;gap:10px;align-items:center;margin:10px 0;font-size:.92rem}
+.opt input{width:18px;height:18px;margin:0;accent-color:var(--pr)}
+.drop{display:flex;flex-direction:column;align-items:center;gap:8px;padding:26px 14px;border:1.5px dashed var(--bd);border-radius:16px;background:var(--in);color:var(--mu);text-align:center;margin:8px 0 12px;transition:.2s}
+.drop{position:relative;overflow:hidden}
+.fin{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;padding:0;border:0;cursor:pointer;font-size:0}
+.drop.has{border-color:var(--pr);color:var(--tx);background:rgba(79,107,255,.07)}
+.drop .tile{width:52px;height:52px}
+.drop span{word-break:break-all;font-size:.92rem}
+.bar{height:6px;background:var(--bd);border-radius:6px;overflow:hidden;margin:14px 0 8px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pr),var(--pr2));transition:width .25s}
+#log{font-size:.82rem;color:var(--mu);white-space:pre-wrap;max-height:130px;overflow:auto}
+.err{color:var(--er);font-size:.9rem;margin:8px 0 0}
+.done{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.done .tile{background:rgba(19,161,90,.14);color:var(--ok)}
+.lk{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--bd);border-radius:15px;margin-top:10px;background:var(--in)}
+.lk.main{border-color:var(--pr);background:rgba(79,107,255,.07)}
+.lk .tx{flex:1;min-width:0}
+.lk b{font-size:.95rem;display:block}
+.lk small{display:block;color:var(--mu);font-size:.78rem}
+.lk .u{display:block;direction:ltr;text-align:left;color:var(--pr);font-size:.76rem;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:none}
+.lk .act{display:flex;gap:6px}
+.fl{transform:scaleX(-1)}
+.seg{display:flex;background:var(--in);border:1px solid var(--bd);border-radius:13px;padding:4px;margin:10px 0 6px}
+.seg button{flex:1;border:0;background:none;color:var(--mu);padding:10px;border-radius:10px;font-weight:700}
+.seg button.on{background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff}
+.adv{margin:4px 0 8px}.adv summary{cursor:pointer;color:var(--mu);font-size:.9rem;padding:8px 0}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:.88rem;opacity:0;pointer-events:none;transition:.25s;z-index:9}
+.toast.on{opacity:1}
+.bs{display:flex;gap:12px;align-items:center;padding:14px;border-radius:15px;border:1px solid var(--bd);background:var(--in);margin:8px 0 10px}
+.bs b{display:block}.bs small{color:var(--mu);font-size:.8rem}
+.bs.ok{border-color:var(--ok)}.bs.err{border-color:var(--er)}
+.bs.ok .tile{background:rgba(19,161,90,.14);color:var(--ok)}
+.bs.err .tile{background:rgba(224,54,75,.12);color:var(--er)}
+.sp{width:46px;height:46px;flex:none;display:grid;place-items:center}
+.sp::after{content:"";width:24px;height:24px;border:3px solid var(--bd);border-top-color:var(--pr);border-radius:50%;animation:r 1s linear infinite}
+@keyframes r{to{transform:rotate(360deg)}}
+.btn.dis,.lk.off{opacity:.4;pointer-events:none;filter:grayscale(.7)}
+.logv{direction:ltr;text-align:left;font:.7rem/1.5 ui-monospace,Menlo,monospace;background:var(--in);border:1px solid var(--bd);border-radius:12px;padding:10px;max-height:190px;overflow:auto;white-space:pre-wrap;word-break:break-all;color:var(--mu);margin:0 0 6px}
+.code{font-family:ui-monospace,Menlo,monospace;font-size:2rem;font-weight:800;letter-spacing:.2em;text-align:center;direction:ltr;padding:16px;border-radius:15px;background:var(--in);border:1.5px dashed var(--pr);color:var(--pr);margin:8px 0}
+.lnk{background:none;border:0;color:var(--mu);width:100%;padding:12px;margin-top:4px;font-size:.88rem;text-decoration:underline}
+a.btn{text-decoration:none}
+ol.st{padding:0 18px 0 0;margin:6px 0 10px;font-size:.86rem;color:var(--mu)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></symbol><symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></symbol><symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol><symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3L21 2"/><path d="M17 6l3 3"/></symbol><symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/><path d="M3 12A9 9 0 0 1 18.5 5.8L21 8"/><path d="M21 3v5h-5"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol><symbol id="i-repo" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></symbol><symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></symbol><symbol id="i-activity" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></symbol><symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></symbol><symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M10 14L20 4"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></symbol><symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4"/><path d="M16 8l4 4-4 4"/><path d="M20 12H9"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></symbol><symbol id="i-zip" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M10 12h2M10 15h2M10 18h2"/></symbol><symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></symbol></svg>
+<main>
+<header>
+  <div class="brand"><div class="logo"><svg class="ic "><use href="#i-box"/></svg></div><div><h1>رافع GitHub</h1><p class="sub">تطبيقاتك ومواقعك على GitHub</p></div></div>
+  <div class="hact">
+    <a class="ib hrt" href="https://abdelsalameselimane-cloud.github.io/support/" target="_blank" rel="noopener" aria-label="ادعم المطوّر"><svg class="ic "><use href="#i-heart"/></svg></a>
+    <button class="ib hid" id="out" onclick="logout()" aria-label="خروج"><svg class="ic "><use href="#i-logout"/></svg></button>
+  </div>
+</header>
+<div class="steps" id="steps"><i></i><i></i><i></i><i></i></div>
+
+<section class="card" id="s1">
+  <h2>تسجيل الدخول</h2>
+  <div id="mainLogin">
+    <p class="mu">سجّل دخولك بحساب GitHub مباشرة، بدون توكن ولا كلمات مرور. يبقى حسابك مرتبطاً ولا تحتاج الدخول كل مرة.</p>
+    <button class="btn" onclick="startDevice()"><svg class="ic "><use href="#i-github"/></svg><span>الدخول بحساب GitHub</span></button>
+    <button class="lnk" onclick="toggleTok()">الدخول بتوكن (متقدم)</button>
+    <div id="tokBox" class="hid">
+      <input id="tok" type="password" placeholder="ghp_xxxxxxxx" dir="ltr" autocomplete="off">
+      <button class="btn sec" onclick="login()"><svg class="ic "><use href="#i-key"/></svg><span>دخول بالتوكن</span></button>
+    </div>
+  </div>
+  <div id="devBox" class="hid">
+    <p class="mu">افتح GitHub وأدخل هذا الرمز ثم اضغط Authorize:</p>
+    <div class="code" id="ucode"></div>
+    <a class="btn" id="openGh" target="_blank" rel="noopener"><svg class="ic "><use href="#i-ext"/></svg><span>نسخ الرمز وفتح GitHub</span></a>
+    <button class="btn sec" onclick="cancelDev()">إلغاء</button>
+    <p class="sub" id="devSt" style="text-align:center;margin-top:10px"></p>
+  </div>
+  <div id="cidBox" class="hid">
+    <p class="mu">إعداد لمرة واحدة: أنشئ تطبيق OAuth خاصاً بك لربط الدخول.</p>
+    <ol class="st"><li>افتح github.com/settings/developers ← OAuth Apps ← New OAuth App</li><li>الاسم أي اسم، وفي Homepage و Callback اكتب https://github.com</li><li>فعّل خيار <b>Enable Device Flow</b> ثم Register</li><li>انسخ <b>Client ID</b> والصقه هنا</li></ol>
+    <input id="cid" placeholder="Client ID" dir="ltr" autocomplete="off">
+    <button class="btn" onclick="saveCid()"><span>حفظ ومتابعة</span></button>
+  </div>
+  <div id="retryBox" class="hid"><button class="btn" onclick="retryLogin()">إعادة المحاولة</button></div>
+  <p class="err" id="e1"></p>
+</section>
+
+<section class="card hid" id="s2">
+  <div class="who"><img id="av" alt=""><div><h2 id="hello"></h2><p class="sub">ماذا تريد أن ترفع؟</p></div></div>
+  <div class="modes">
+    <button class="mode" onclick="pickKind('app')"><div class="tile"><svg class="ic "><use href="#i-phone"/></svg></div><div><b>رفع تطبيق (APK)</b><small>مشروع أندرويد أو Flutter أو ويب يتحوّل إلى تطبيق</small></div></button>
+    <button class="mode" onclick="pickKind('site')"><div class="tile"><svg class="ic "><use href="#i-globe"/></svg></div><div><b>نشر موقع HTML</b><small>استضافة مجانية على GitHub ورابط عام لموقعك</small></div></button>
+  </div>
+  <a class="sup" href="https://abdelsalameselimane-cloud.github.io/support/" target="_blank" rel="noopener"><div class="tile"><svg class="ic "><use href="#i-heart"/></svg></div><div class="tx"><b>ادعم المطوّر</b><small>أعجبك التطبيق؟ ادعمه بأي مبلغ بعملة USDT</small></div><svg class="ic "><use href="#i-ext"/></svg></a>
+</section>
+
+<section class="card hid" id="s3">
+  <h2 id="upTitle"></h2>
+  <div class="seg"><button id="segNew" class="on" onclick="setMode('new')">مشروع جديد</button><button id="segUpd" onclick="setMode('update')">تحديث مشروع</button></div>
+  <div id="newBox">
+    <input id="newName" placeholder="project-name" dir="ltr">
+    <label class="opt" id="privOpt"><input type="checkbox" id="priv"><span>مشروع خاص (Private)</span></label>
+    <p class="mu hid" id="pubNote">الاستضافة المجانية تتطلب أن يكون المشروع عاماً (Public).</p>
+  </div>
+  <div id="updBox" class="hid">
+    <input id="q" placeholder="بحث..." dir="ltr" oninput="fillRepos()">
+    <div class="list" id="repoSel"></div>
+  </div>
+  <div class="drop" id="drop"><div class="tile"><svg class="ic "><use href="#i-zip"/></svg></div><span id="zname">اضغط لاختيار ملف ZIP</span><input type="file" id="zip" class="fin"></div>
+  <details class="adv"><summary>خيارات متقدمة</summary>
+    <label class="opt"><input type="checkbox" id="replace"><span>حذف الملفات القديمة واستبدالها بالكامل</span></label>
+    <label class="opt" id="apkOpt"><input type="checkbox" id="autoapk" checked><span>بناء APK تلقائياً حسب نوع المشروع</span></label>
+    <input id="msg" placeholder="رسالة التحديث (اختياري)">
+  </details>
+  <div class="row"><button class="btn sec" onclick="go(2)"><svg class="ic "><use href="#i-arrow"/></svg><span>رجوع</span></button><button class="btn" id="upBtn" onclick="upload()"><svg class="ic "><use href="#i-upload"/></svg><span>رفع</span></button></div>
+  <div class="bar hid" id="bar"><i id="bi"></i></div>
+  <div id="log"></div>
+  <p class="err" id="e4"></p>
+</section>
+
+<section class="card hid" id="s4">
+  <div class="done"><div class="tile"><svg class="ic "><use href="#i-check"/></svg></div><div><h2>تم الرفع بنجاح</h2><p class="sub" id="note"></p></div></div>
+  <div class="bs" id="bs"></div>
+  <div id="bsx"></div>
+  <a class="btn dis" id="apkBtn" target="_blank" rel="noopener"><svg class="ic "><use href="#i-download"/></svg><span id="apkLbl">تحميل التطبيق (APK)</span></a>
+  <div class="bar hid" id="dbar"><i id="dbi"></i></div>
+  <div id="links"></div>
+  <a class="sup" href="https://abdelsalameselimane-cloud.github.io/support/" target="_blank" rel="noopener"><div class="tile"><svg class="ic "><use href="#i-heart"/></svg></div><div class="tx"><b>ادعم المطوّر</b><small>أعجبك التطبيق؟ ادعمه بأي مبلغ بعملة USDT</small></div><svg class="ic "><use href="#i-ext"/></svg></a>
+  <button class="btn sec" onclick="go(2)"><svg class="ic "><use href="#i-upload"/></svg><span>رفع مشروع آخر</span></button>
+</section>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+function showErr(m){try{var t=document.getElementById('toast');t.textContent='خطأ: '+m;t.classList.add('on');setTimeout(function(){t.classList.remove('on')},9000)}catch(_){}}
+window.addEventListener('error',function(e){showErr(e.message)});
+window.addEventListener('unhandledrejection',function(e){showErr(e.reason&&e.reason.message||e.reason)});
+var $=s=>document.getElementById(s);
+var kind='app';
+var token='',user=null,repos=[],mode='',zipFile=null;
+var ic=(n,c='')=>`<svg class="ic ${c}"><use href="#i-${n}"/></svg>`;
+var store={get:k=>{try{return localStorage.getItem(k)}catch{return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}},del:k=>{try{localStorage.removeItem(k)}catch{}}};
+
+function go(n){for(let i=1;i<=4;i++)$('s'+i).classList.toggle('hid',i!==n);$('out').classList.toggle('hid',!user);[...$('steps').children].forEach((e,i)=>e.classList.toggle('on',i<n))}
+async function gh(path,opt={}){
+  const r=await fetch('https://api.github.com'+path,{...opt,headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json','Content-Type':'application/json'}});
+  if(!r.ok){let m='';try{m=(await r.json()).message}catch{}const e=new Error(m||('HTTP '+r.status));e.status=r.status;throw e}
+  return r.status===204?null:r.json();
+}
+var NATIVE=!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());
+function plug(n){try{if(!NATIVE)return null;var P=Capacitor.Plugins;if(P&&P[n])return P[n];if(typeof Capacitor.registerPlugin==='function')return Capacitor.registerPlugin(n)}catch(e){}return null}
+var CLIENT_ID_DEFAULT='Ov23lishfKw8GEIfE078';
+var cid=()=>CLIENT_ID_DEFAULT||store.get('gh_cid')||'';
+var devTimer=null,devCancel=true;
+function toggleTok(){$('tokBox').classList.toggle('hid')}
+function saveCid(){
+  const v=$('cid').value.trim();
+  if(!/^[A-Za-z0-9._]{8,}$/.test(v)){$('e1').textContent='معرّف غير صالح';return}
+  store.set('gh_cid',v);$('cidBox').classList.add('hid');$('mainLogin').classList.remove('hid');$('e1').textContent='';startDevice();
+}
+async function form(url,data){
+  const r=await fetch(url,{method:'POST',headers:{Accept:'application/json','Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(data).toString()});
+  return r.json();
+}
+function endDev(msg){devCancel=true;clearTimeout(devTimer);$('devBox').classList.add('hid');$('mainLogin').classList.remove('hid');$('e1').textContent=msg||''}
+function cancelDev(){endDev()}
+async function startDevice(){
+  $('e1').textContent='';
+  if(!NATIVE){$('e1').textContent='الدخول بحساب GitHub يعمل داخل تطبيق APK فقط لأن المتصفح يمنعه. ثبّت التطبيق أو استخدم التوكن هنا.';$('tokBox').classList.remove('hid');return}
+  if(!cid()){$('mainLogin').classList.add('hid');$('cidBox').classList.remove('hid');return}
+  try{
+    const d=await form('https://github.com/login/device/code',{client_id:cid(),scope:'repo workflow'});
+    if(d.error)throw new Error(d.error_description||d.error);
+    $('ucode').textContent=d.user_code;$('openGh').href=d.verification_uri;
+    $('openGh').onclick=()=>{try{navigator.clipboard.writeText(d.user_code)}catch{}};
+    $('mainLogin').classList.add('hid');$('devBox').classList.remove('hid');$('devSt').textContent='بانتظار موافقتك...';
+    devCancel=false;let iv=(d.interval||5)*1000;const end=Date.now()+d.expires_in*1000;
+    const poll=async()=>{
+      if(devCancel)return;
+      if(Date.now()>end){endDev('انتهت صلاحية الرمز، حاول مرة أخرى');return}
+      try{
+        const r=await form('https://github.com/login/oauth/access_token',{client_id:cid(),device_code:d.device_code,grant_type:'urn:ietf:params:oauth:grant-type:device_code'});
+        if(r.access_token){endDev();await login(r.access_token);return}
+        if(r.error==='slow_down')iv+=5000;
+        else if(r.error&&r.error!=='authorization_pending'){endDev(r.error==='access_denied'?'تم رفض الطلب':(r.error_description||r.error));return}
+      }catch(e){}
+      if(!devCancel)devTimer=setTimeout(poll,iv);
+    };
+    devTimer=setTimeout(poll,iv);
+  }catch(e){
+    $('e1').textContent='تعذّر بدء الدخول: '+e.message;
+    if(!CLIENT_ID_DEFAULT){store.del('gh_cid');$('mainLogin').classList.add('hid');$('cidBox').classList.remove('hid')}
+  }
+}
+
+var PREF=plug('Preferences');
+async function kvGet(k){if(PREF){try{const r=await PREF.get({key:k});if(r.value!=null)return r.value}catch(e){}}return store.get(k)}
+async function kvSet(k,v){store.set(k,v);if(PREF){try{await PREF.set({key:k,value:v})}catch(e){}}}
+async function kvDel(k){store.del(k);if(PREF){try{await PREF.remove({key:k})}catch(e){}}}
+var pendingToken='';
+async function login(t,silent){
+  token=(typeof t==='string'?t:$('tok').value).trim();$('e1').textContent='جاري التحقق...';$('retryBox').classList.add('hid');
+  if(!token){$('e1').textContent='أدخل التوكن';return}
+  let lastErr=null;
+  for(let i=0;i<(silent?4:1);i++){
+    try{
+      user=await gh('/user');$('e1').textContent='';pendingToken='';await kvSet('gh_token',token);
+      $('hello').textContent=user.login;$('av').src=user.avatar_url||'';go(2);if(silent)resumePending();return;
+    }catch(e){
+      lastErr=e;
+      if(e.status===401)break;
+      if(i<3&&silent)await sleep(1500);
+    }
+  }
+  user=null;go(1);
+  if(lastErr&&lastErr.status===401){token='';await kvDel('gh_token');$('e1').textContent='انتهت صلاحية الدخول، سجّل دخولك من جديد'}
+  else if(silent){pendingToken=token;token='';$('retryBox').classList.remove('hid');$('e1').textContent='تعذّر الاتصال بـ GitHub، تحقق من الإنترنت'}
+  else{token='';$('e1').textContent='فشل الدخول: '+(lastErr&&lastErr.message)}
+}
+function retryLogin(){if(pendingToken)login(pendingToken,true)}
+function logout(){endDev();kvDel('gh_token');user=null;token='';pendingToken='';repos=[];$('tok').value='';go(1)}
+async function loadRepos(){
+  repos=[];
+  for(let p=1;p<=5;p++){
+    const r=await gh(`/user/repos?per_page=100&page=${p}&sort=updated&affiliation=owner`);
+    repos.push(...r);if(r.length<100)break;
+  }
+}
+var sel='';
+function fillRepos(){
+  const q=$('q').value.toLowerCase(),box=$('repoSel');box.innerHTML='';
+  repos.filter(r=>r.name.toLowerCase().includes(q)).forEach(r=>{
+    const b=document.createElement('button');b.type='button';b.className='repo'+(sel===r.full_name?' on':'');
+    b.innerHTML=ic(r.private?'lock':'repo')+'<span></span>';b.lastChild.textContent=r.name;
+    b.onclick=()=>{sel=r.full_name;fillRepos()};box.appendChild(b);
+  });
+}
+
+var target=null;
+function pickKind(k){
+  kind=k;pickedFile=null;try{$('zip').value=''}catch(e){}showPicked(null);
+  $('upTitle').textContent=k==='app'?'رفع تطبيق':'نشر موقع HTML';
+  $('apkOpt').classList.toggle('hid',k!=='app');
+  $('privOpt').classList.toggle('hid',k==='site');$('pubNote').classList.toggle('hid',k!=='site');
+  $('e4').textContent='';$('log').textContent='';$('bar').classList.add('hid');
+  setMode('new');go(3);
+}
+async function setMode(m){
+  mode=m;$('segNew').classList.toggle('on',m==='new');$('segUpd').classList.toggle('on',m==='update');
+  $('newBox').classList.toggle('hid',m!=='new');$('updBox').classList.toggle('hid',m!=='update');
+  if(m==='update'&&!repos.length){
+    $('repoSel').innerHTML='<p class="mu">جاري التحميل...</p>';
+    try{await loadRepos()}catch(e){$('e4').textContent=e.message}
+  }
+  if(m==='update')fillRepos();
+}
+async function fileToB64(f){const buf=new Uint8Array(await f.arrayBuffer());let s='';for(let i=0;i<buf.length;i+=0x8000)s+=String.fromCharCode.apply(null,buf.subarray(i,i+0x8000));return btoa(s)}
+
+
+var log=t=>{$('log').textContent+=t+'\n';$('log').scrollTop=1e9};
+var prog=p=>{$('bi').style.width=p+'%'};
+
+var dirOf=p=>p.includes('/')?p.slice(0,p.lastIndexOf('/')):'.';
+var shortest=a=>a.sort((x,y)=>x.split('/').length-y.split('/').length)[0];
+function detect(paths){
+  const f=re=>shortest(paths.filter(p=>re.test(p)));let p;
+  if(p=f(/(^|\/)pubspec\.yaml$/))return{t:'flutter',dir:dirOf(p),label:'Flutter'};
+  if(p=f(/(^|\/)capacitor\.config\.(json|ts|js)$/))return{t:'cap',dir:dirOf(p),label:'Capacitor'};
+  if(p=f(/(^|\/)settings\.gradle(\.kts)?$/))return{t:'android',dir:dirOf(p),label:'Android (Gradle)'};
+  if(p=f(/(^|\/)index\.html$/))return{t:'web',dir:dirOf(p),label:'ويب (HTML)'};
+  return null;
+}
+function workflow(d){
+  const D=d.dir;
+  const J17=`      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+`;
+  const NODE=`      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+`;
+  let steps='';
+  if(d.t==='android')steps=J17+`      - name: Accept licenses
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.9
+      - name: Build
+        run: |
+          cd "${D}"
+          if [ -f gradlew ]; then chmod +x gradlew; ./gradlew assembleDebug --no-daemon --stacktrace; else gradle assembleDebug --no-daemon --stacktrace; fi
+`;
+  else if(d.t==='flutter')steps=J17+`      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Build
+        run: |
+          cd "${D}"
+          [ -d android ] || flutter create --platforms=android .
+          flutter pub get
+          flutter build apk --release
+`;
+  else if(d.t==='cap')steps=NODE+J17+`      - name: Build
+        run: |
+          cd "${D}"
+          npm install
+          npm run build --if-present
+          [ -d android ] || npx cap add android
+          npx cap sync android
+          cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
+`;
+  else steps=NODE+J17+`      - name: Wrap web app
+        run: |
+          mkdir -p /tmp/cap/www
+          cp -r "${D}"/. /tmp/cap/www/
+          cd /tmp/cap
+          npm init -y
+          npm i @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
+          npx cap init "Web App" com.web.app --web-dir=www
+          npx cap add android
+          npx cap sync android
+          cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
+`;
+  return `name: Build APK
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+`+steps+`      - name: Collect APK
+        run: |
+          APK=$(find . /tmp/cap -path "*outputs*" -name "*.apk" 2>/dev/null | head -1)
+          echo "APK=$APK"
+          test -n "$APK"
+          cp "$APK" "$GITHUB_WORKSPACE/app.apk"
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v\${{ github.run_number }}
+          name: Build \${{ github.run_number }}
+          files: app.apk
+`;
+}
+
+async function upload(){
+  $('e4').textContent='';$('log').textContent='';
+  const err=m=>{$('e4').textContent=m};
+  if(mode==='update'){if(!sel)return err('اختر المشروع من القائمة');target=repos.find(r=>r.full_name===sel)}
+  else{const nm=$('newName').value.trim();if(!/^[A-Za-z0-9._-]+$/.test(nm))return err('اسم المشروع غير صالح: أحرف إنجليزية وأرقام و - _ . فقط');target={name:nm,newRepo:true}}
+  zipFile=pickedFile||$('zip').files[0];
+  if(!zipFile)return err(kind==='site'?'اختر ملف ZIP أو HTML أولاً':'اختر ملف ZIP أولاً');
+  const isHtml=/\.html?$/i.test(zipFile.name||'');
+  if(isHtml&&kind!=='site')return err('هذا ملف HTML، اختر ملف ZIP للتطبيق');
+  $('upBtn').disabled=true;$('bar').classList.remove('hid');prog(0);hasBuild=false;await ensureNotif();
+  try{
+    log('قراءة الملف...');
+    let z;
+    if(isHtml){const b64=await fileToB64(zipFile);z={files:{'index.html':{dir:false,async:async()=>b64}}}}
+    else z=await JSZip.loadAsync(zipFile);
+    let names=Object.keys(z.files).filter(n=>!z.files[n].dir&&!/(^|\/)(__MACOSX|\.DS_Store)(\/|$)/.test(n)&&!n.startsWith('.git/'));
+    if(!names.length)throw new Error('الملف فارغ');
+    const roots=new Set(names.map(n=>n.split('/')[0]));
+    const strip=(roots.size===1&&names.every(n=>n.includes('/')))?[...roots][0]+'/':'';
+    const outP=n=>strip?n.slice(strip.length):n;
+    log(`${names.length} ملف`);
+    let renameFrom=null;
+    if(kind==='site'){
+      const ps=names.map(outP);
+      if(!ps.includes('index.html')){
+        const h=ps.filter(x=>/^[^/]+\.html?$/i.test(x));
+        if(h.length===1)renameFrom=names[ps.indexOf(h[0])];
+        else throw new Error('لم أجد ملف index.html في المشروع');
+      }
+    }
+
+    let repo=target;
+    if(target.newRepo){
+      log('إنشاء المشروع...');
+      repo=await gh('/user/repos',{method:'POST',body:JSON.stringify({name:target.name,private:kind==='site'?false:$('priv').checked,auto_init:true})});
+    }
+    const full=repo.full_name,branch=repo.default_branch||'main';
+
+    let ref;
+    try{ref=await gh(`/repos/${full}/git/ref/heads/${branch}`)}
+    catch(e){
+      log('مشروع فارغ، تهيئة...');
+      await gh(`/repos/${full}/contents/.gitkeep`,{method:'PUT',body:JSON.stringify({message:'init',content:''})});
+      ref=await gh(`/repos/${full}/git/ref/heads/${branch}`);
+    }
+    const base=ref.object.sha;
+
+    log('رفع الملفات...');
+    const tree=[];let done=0,i=0;
+    async function worker(){
+      while(i<names.length){
+        const n=names[i++];
+        const b64=await z.files[n].async('base64');
+        let blob,tries=0;
+        while(true){
+          try{blob=await gh(`/repos/${full}/git/blobs`,{method:'POST',body:JSON.stringify({content:b64,encoding:'base64'})});break}
+          catch(e){if(++tries>3)throw new Error(`فشل رفع ${n}: ${e.message}`);await new Promise(r=>setTimeout(r,1000*tries))}
+        }
+        tree.push({path:n===renameFrom?'index.html':outP(n),mode:'100644',type:'blob',sha:blob.sha});
+        prog(Math.round(++done/names.length*85));
+      }
+    }
+    await Promise.all(Array.from({length:5},worker));
+
+    if(kind==='site'){
+      if(!tree.some(x=>x.path==='.nojekyll')){
+        const nb=await gh(`/repos/${full}/git/blobs`,{method:'POST',body:JSON.stringify({content:'',encoding:'utf-8'})});
+        tree.push({path:'.nojekyll',mode:'100644',type:'blob',sha:nb.sha});
+      }
+    }else{
+      hasBuild=names.some(n=>/(^|\/)\.github\/workflows\//.test(n));
+      if($('autoapk').checked){
+        const paths=names.map(outP);
+        if(paths.some(x=>x.startsWith('.github/workflows/')))log('يوجد ملف بناء في المشروع، تُرك كما هو');
+        else{
+          const d=detect(paths);
+          if(d){
+            const yml=workflow(d);
+            const bl=await gh(`/repos/${full}/git/blobs`,{method:'POST',body:JSON.stringify({content:btoa(unescape(encodeURIComponent(yml))),encoding:'base64'})});
+            tree.push({path:'.github/workflows/build-apk.yml',mode:'100644',type:'blob',sha:bl.sha});
+            hasBuild=true;log(`نوع المشروع: ${d.label} — أُضيف ملف بناء APK`);
+          }else log('لم أتعرف على نوع المشروع، لم يُضف بناء APK');
+        }
+      }
+    }
+
+    log('بناء الإصدار...');
+    const body={tree};
+    if(!$('replace').checked&&!target.newRepo)body.base_tree=base;
+    else if(target.newRepo)body.base_tree=base;
+    const t=await gh(`/repos/${full}/git/trees`,{method:'POST',body:JSON.stringify(body)});
+    const msg=$('msg').value.trim()||(target.newRepo?'Initial upload':'Update')+' via Uploader';
+    const c=await gh(`/repos/${full}/git/commits`,{method:'POST',body:JSON.stringify({message:msg,tree:t.sha,parents:[base]})});
+    await gh(`/repos/${full}/git/refs/heads/${branch}`,{method:'PATCH',body:JSON.stringify({sha:c.sha})});
+    prog(92);
+
+    let pagesErr='',siteUrl='';
+    if(kind==='site'){
+      log('تفعيل الاستضافة...');
+      try{await gh(`/repos/${full}/pages`,{method:'POST',body:JSON.stringify({source:{branch,path:'/'}})})}
+      catch(e){if(e.status!==409&&e.status!==422)pagesErr=e.message||('HTTP '+e.status)}
+      const [o,nm]=full.split('/');
+      siteUrl=`https://${o.toLowerCase()}.github.io/${nm.toLowerCase()===o.toLowerCase()+'.github.io'?'':nm+'/'}`;
+    }
+    prog(100);
+    showDone({kind,full,branch,sha:c.sha,priv:repo.private,siteUrl,pagesErr});
+  }catch(e){
+    $('e4').textContent=''+e.message;
+  }finally{$('upBtn').disabled=false}
+}
+
+var watchId=0,hasBuild=false,APKURL='';
+var sleep=ms=>new Promise(r=>{const t=setTimeout(d,ms);function d(){clearTimeout(t);removeEventListener('wake',d);r()}addEventListener('wake',d)});
+var wake=()=>dispatchEvent(new Event('wake'));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)wake()});
+try{var APPP=plug('App');if(APPP)Promise.resolve(APPP.addListener('appStateChange',function(e){if(e.isActive)wake()})).catch(function(){})}catch(e){}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)}
+var lastErr='',notifOK=false;
+var LN=plug('LocalNotifications');
+async function ensureNotif(){
+  if(!LN||notifOK)return;
+  try{
+    let p=await LN.checkPermissions();
+    if(p.display!=='granted')p=await LN.requestPermissions();
+    notifOK=p.display==='granted';
+    if(notifOK){
+      await LN.createChannel({id:'build',name:'حالة البناء',importance:2,vibration:false});
+      await LN.createChannel({id:'result',name:'نتيجة البناء',importance:4,vibration:true});
+      await LN.registerActionTypes({types:[{id:'OK',actions:[{id:'download',title:'تحميل التطبيق'}]},{id:'FAIL',actions:[{id:'copy',title:'نسخ الخلل'}]},{id:'SITE',actions:[{id:'open',title:'فتح الموقع'}]}]});
+    }
+  }catch(e){}
+}
+var notify=o=>{if(LN&&notifOK)LN.schedule({notifications:[o]}).catch(()=>{})};
+var nCancel=ids=>{if(LN)LN.cancel({notifications:ids.map(id=>({id}))}).catch(()=>{})};
+if(LN)Promise.resolve(LN.addListener('localNotificationActionPerformed',async e=>{
+  const ex=(e.notification&&e.notification.extra)||{};
+  if(e.actionId==='download'&&ex.url)downloadApk(ex.url);
+  else if(e.actionId==='open'&&ex.url)window.open(ex.url,'_blank');
+  else if(e.actionId==='copy'){await sleep(700);const ok=await copyText(lastErr||store.get('last_err')||'');toast(ok?'تم نسخ الخلل':'تعذّر النسخ')}
+})).catch(()=>{});
+function setBS(kind,title,sub){
+  const el=$('bs');el.className='bs '+kind;
+  el.innerHTML=(kind==='run'?'<div class="sp"></div>':'<div class="tile">'+ic(kind==='ok'?'check':'alert')+'</div>')+`<div><b>${title}</b><small>${sub||''}</small></div>`;
+}
+function apkReady(ok,hide){
+  const b=$('apkBtn'),r=$('apkRow');
+  b.classList.toggle('dis',!ok);b.classList.toggle('hid',!!hide);
+  if(ok)b.href=APKURL;else b.removeAttribute('href');
+  if(r){r.classList.toggle('off',!ok);r.classList.toggle('hid',!!hide)}
+}
+function buildLogText(head,log){
+  const lines=log.split('\n').map(l=>l.replace(/^\d{4}-\d\d-\d\dT[\d:.]+Z /,'').replace(/\r$/,''));
+  const errs=[...new Set(lines.filter(l=>l.includes('##[error]')||/(^|\s)(e: |error:|FAILURE:|What went wrong)/i.test(l)))].slice(0,40);
+  const tail=lines.slice(-120);
+  return (head+'\n--- errors ---\n'+errs.join('\n')+'\n\n--- last lines ---\n'+tail.join('\n')).slice(0,15000);
+}
+var dlBusy=false;
+var FS=plug('Filesystem'),FO=plug('FileOpener');
+function setDl(p,txt){$('dbar').classList.toggle('hid',p===null);if(p!==null)$('dbi').style.width=p+'%';$('apkLbl').textContent=txt||'تحميل التطبيق (APK)'}
+async function downloadApk(url){
+  url=url||APKURL;
+  if(!NATIVE){window.open(url,'_blank');return}
+  if(dlBusy)return;dlBusy=true;let h;
+  try{
+    setDl(0,'جاري التحميل...');
+    h=await FS.addListener('progress',e=>{if(e.contentLength>0){const q=Math.round(e.bytes/e.contentLength*100);setDl(q,`جاري التحميل ${q}%`)}});
+    await FS.downloadFile({url,path:'app-update.apk',directory:'CACHE',progress:true});
+    const u=await FS.getUri({path:'app-update.apk',directory:'CACHE'});
+    setDl(100,'جاري فتح المثبّت...');
+    await FO.open({filePath:u.uri,contentType:'application/vnd.android.package-archive',openWithDefault:true});
+    toast('اضغط «تثبيت». وإن طلب الهاتف السماح فعّله ثم أعد الضغط');
+  }catch(e){toast('تعذّر التحميل داخل التطبيق، سيفتح المتصفح');window.open(url,'_blank')}
+  finally{try{h&&h.remove()}catch(e){}setTimeout(()=>{setDl(null);dlBusy=false},1200)}
+}
+$('apkBtn').addEventListener('click',e=>{if(NATIVE&&kind==='app'){e.preventDefault();downloadApk()}});
+
+async function copyText(t){
+  try{await navigator.clipboard.writeText(t);return true}catch{}
+  try{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();const ok=document.execCommand('copy');a.remove();return ok}catch{return false}
+}
+function renderFail(full,text,openUrl,what,sub){
+  setBS('err','فشل '+what,sub||'');
+  apkReady(false);
+  $('bsx').innerHTML=`<pre class="logv" id="logv"></pre><div class="row"><button class="btn" id="cpLog">${ic('copy')}<span>نسخ سجل الخطأ</span></button><a class="btn sec" target="_blank" rel="noopener" href="${openUrl}">${ic('ext')}<span>فتح على GitHub</span></a></div>`;
+  $('logv').textContent=text;lastErr=text;store.set('last_err',text);
+  endNotif();notify({id:1003,title:'فشل '+what,body:full,channelId:'result',actionTypeId:'FAIL'});
+  $('cpLog').onclick=async()=>{const ok=await copyText(text);toast(ok?'تم نسخ الخلل':'تعذّر النسخ');const b=$('cpLog');b.innerHTML=ic(ok?'check':'alert')+`<span>${ok?'تم النسخ':'تعذّر النسخ، حدّد النص يدوياً'}</span>`;setTimeout(()=>b.innerHTML=ic('copy')+'<span>نسخ سجل الخطأ</span>',2000)};
+}
+async function showFail(full,run){
+  setBS('err','فشل البناء','جاري قراءة سجل الخطأ...');
+  let head=`Build failed: ${full}\nWorkflow: ${run.name}\nRun: ${run.html_url}\n`,text=head,sub='';
+  try{
+    const jobs=(await gh(`/repos/${full}/actions/runs/${run.id}/jobs`)).jobs||[];
+    const job=jobs.find(j=>j.conclusion==='failure')||jobs[0];
+    const step=job&&(job.steps||[]).find(x=>x.conclusion==='failure');
+    head=`Build failed: ${full}\nWorkflow: ${run.name}\nFailed step: ${step?step.name:'unknown'}\nRun: ${run.html_url}\n`;
+    text=head;
+    let log='';
+    try{const r=await fetch(`https://api.github.com/repos/${full}/actions/jobs/${job.id}/logs`,{headers:{Authorization:'Bearer '+token}});if(r.ok)log=await r.text()}catch(e){}
+    if(log)text=buildLogText(head,log);
+    else{try{const an=await gh(`/repos/${full}/check-runs/${job.id}/annotations`);text=head+'\n'+an.map(a=>`${a.annotation_level}: ${a.message}`).join('\n')}catch(e){}}
+    sub=step?`في الخطوة: ${step.name}`:'';
+  }catch(e){sub='تعذّر قراءة السجل'}
+  renderFail(full,text,run.html_url,'بناء التطبيق',sub);
+}
+async function watchSite(full,sha,pagesErr){
+  const id=++watchId,t0=Date.now();
+  nCancel([1002,1003]);
+  if(pagesErr){renderFail(full,'Pages setup failed: '+full+'\n'+pagesErr+'\nالاستضافة المجانية تتطلب مشروعاً عاماً (Public).','https://github.com/'+full+'/settings/pages','نشر الموقع','تعذّر تفعيل الاستضافة');return}
+  setBS('run','جاري نشر الموقع','يستغرق عادةً أقل من دقيقتين');apkReady(false);
+  useBM=await bmStart(full,'جاري نشر الموقع');
+  const bn=b=>useBM?bmSet(b,'جاري نشر الموقع'):notify({id:1001,title:'جاري نشر الموقع',body:b,channelId:'build',ongoing:true,autoCancel:false});
+  if(!useBM)bn(full);
+  while(id===watchId){
+    await sleep(5000);if(id!==watchId)return;
+    const sec=Math.floor((Date.now()-t0)/1000);
+    let b=null;try{b=await gh(`/repos/${full}/pages/builds/latest`)}catch(e){}
+    const mine=b&&(!b.commit||b.commit===sha||sec>60);
+    if(b&&mine&&b.status==='built'){
+      setBS('ok','تم نشر الموقع','قد يحتاج ظهوره دقيقة إضافية');apkReady(true);
+      endNotif();notify({id:1002,title:'تم نشر موقعك',body:APKURL,channelId:'result',actionTypeId:'SITE',extra:{url:APKURL}});return;
+    }
+    if(b&&mine&&b.status==='errored'){
+      renderFail(full,'Pages build failed: '+full+'\n'+((b.error&&b.error.message)||'unknown error'),'https://github.com/'+full+'/actions','نشر الموقع','فشل بناء الصفحات');return;
+    }
+    if(sec>600){endNotif();setBS('err','النشر يستغرق وقتاً طويلاً','تحقق من إعدادات Pages في المشروع');return}
+    setBS('run','جاري نشر الموقع',`الوقت المنقضي ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`);
+  }
+}
+var BM=plug('BackgroundMode');
+var useBM=false;
+function bmSet(text,title){return BM?BM.setSettings({title:title||'جاري بناء التطبيق',text:text,channelName:'حالة البناء',channelDescription:'متابعة البناء والنشر',color:'4f6bff',resume:true,hidden:false,silent:false,disableWebViewOptimization:true}).catch(function(){}):Promise.resolve()}
+async function bmStart(full,title){
+  if(!BM)return false;
+  try{
+    await bmSet(full,title);await BM.enable();await BM.disableWebViewOptimizations();
+    if(!store.get('bo_asked')){store.set('bo_asked','1');try{var b=await BM.checkBatteryOptimizations();if(!b.disabled)await BM.requestDisableBatteryOptimizations()}catch(e){}}
+    return true;
+  }catch(e){return false}
+}
+function endNotif(){nCancel([1001]);if(BM)BM.disable().catch(function(){});kvDel('pending_build')}
+async function resumePending(){
+  try{
+    var j=await kvGet('pending_build');if(!j)return;var p=JSON.parse(j);
+    if(Date.now()-p.t>3600000){await kvDel('pending_build');return}
+    hasBuild=true;showDone(p,true);
+  }catch(e){}
+}
+
+async function watchBuild(full,sha){
+  const id=++watchId,t0=Date.now(),limit=hasBuild?240:45;
+  setBS('run','جاري بناء التطبيق','قد يستغرق 5 إلى 8 دقائق');apkReady(false);
+  nCancel([1002,1003]);let lastMin=-1;
+  useBM=await bmStart(full);
+  const bn=(b)=>useBM?bmSet(b):notify({id:1001,title:'جاري بناء التطبيق',body:b,channelId:'build',ongoing:true,autoCancel:false});if(!useBM)bn(full);
+  while(id===watchId){
+    await sleep(7000);if(id!==watchId)return;
+    const sec=Math.floor((Date.now()-t0)/1000);
+    let runs=[];
+    try{runs=((await gh(`/repos/${full}/actions/runs?head_sha=${sha}&per_page=20`)).workflow_runs||[]).filter(x=>x.event==='push'||x.event==='workflow_dispatch')}catch(e){}
+    if(!runs.length){
+      if(sec>limit){
+        endNotif();
+        if(hasBuild)setBS('err','لم يبدأ البناء','تأكد أن GitHub Actions مفعّل في المشروع');
+        else{setBS('ok','تم الرفع','لا يوجد بناء تلقائي لهذا المشروع');apkReady(false,true)}
+        return;
+      }
+      continue;
+    }
+    if(runs.some(x=>x.status!=='completed')){
+      if(sec>2400){endNotif();setBS('err','البناء يستغرق وقتاً طويلاً','تابعه من صفحة Actions');return}
+      const mn=Math.floor(sec/60);if(mn!==lastMin){lastMin=mn;bn(`${full} · ${mn} د`)}
+      setBS('run','جاري بناء التطبيق',`الوقت المنقضي ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`);continue;
+    }
+    const bad=runs.find(x=>x.conclusion!=='success'&&x.conclusion!=='skipped');
+    if(!bad){setBS('ok','اكتمل البناء','التطبيق جاهز للتحميل');apkReady(true);endNotif();notify({id:1002,title:'اكتمل بناء التطبيق',body:full,channelId:'result',actionTypeId:'OK',extra:{url:APKURL}});return}
+    await showFail(full,bad);return;
+  }
+}
+
+function showDone(info,resumed){
+  const full=info.full,kd=info.kind||'app';kind=kd;
+  if(!resumed)kvSet('pending_build',JSON.stringify(Object.assign({t:Date.now()},info)));
+  $('bsx').innerHTML='';
+  const items=[];
+  if(kd==='app'){
+    APKURL=`https://github.com/${full}/releases/latest/download/app.apk`;
+    $('apkBtn').innerHTML=ic('download')+'<span id="apkLbl">تحميل التطبيق (APK)</span>';
+    items.push(['phone','تحميل APK مباشر','يعمل بعد انتهاء البناء (نحو 5 دقائق)',APKURL,1]);
+    items.push(['download','تحميل المشروع (ZIP)','',`https://github.com/${full}/archive/refs/heads/${info.branch}.zip`]);
+    items.push(['activity','متابعة البناء','Actions',`https://github.com/${full}/actions`]);
+  }else{
+    APKURL=info.siteUrl;
+    $('apkBtn').innerHTML=ic('globe')+'<span id="apkLbl">فتح الموقع</span>';
+    items.push(['globe','رابط موقعك','يظهر خلال دقيقة أو دقيقتين',APKURL,1]);
+  }
+  items.push(['repo','صفحة المشروع','',`https://github.com/${full}`]);
+  $('links').innerHTML=items.map(([i,t,sb,u,m])=>`<div class="lk${m?' main':''}"><div class="tile">${ic(i)}</div><div class="tx"><b>${t}</b>${sb?`<small>${sb}</small>`:''}<a class="u" target="_blank" rel="noopener" href="${u}">${u}</a></div><div class="act"><button class="ib" data-u="${u}" aria-label="نسخ">${ic('copy')}</button><a class="ib" target="_blank" rel="noopener" href="${u}" aria-label="فتح">${ic('ext')}</a></div></div>`).join('');
+  $('links').querySelectorAll('button[data-u]').forEach(b=>b.onclick=()=>{
+    try{navigator.clipboard.writeText(b.dataset.u)}catch{}
+    b.innerHTML=ic('check');setTimeout(()=>b.innerHTML=ic('copy'),1500)});
+  $('note').textContent=info.priv&&kd==='app'?'المشروع خاص: الروابط تعمل لحسابك فقط':full;
+  const ar=$('links').querySelector('.lk.main');if(ar){ar.id='apkRow';ar.classList.add('off')}
+  go(4);
+  if(kd==='app')watchBuild(full,info.sha);else watchSite(full,info.sha,info.pagesErr);
+}
+var pickedFile=null;
+var FP=plug('FilePicker');
+async function showPicked(f){
+  $('e4').textContent='';$('drop').classList.toggle('has',!!f);
+  if(!f){$('zname').textContent=kind==='site'?'اضغط لاختيار ملف ZIP أو HTML':'اضغط لاختيار ملف ZIP';return}
+  $('zname').textContent=`${f.name} (${(f.size/1048576).toFixed(1)} MB)`;
+  if(kind==='site'&&/\.html?$/i.test(f.name||''))return;
+  try{const b=new Uint8Array(await f.slice(0,2).arrayBuffer());if(b[0]!==0x50||b[1]!==0x4B)$('e4').textContent='هذا الملف ليس ZIP صالحاً'}
+  catch(e){$('e4').textContent='تعذّرت قراءة الملف، جرّب اختياره مرة أخرى'}
+}
+async function onPick(){pickedFile=null;await showPicked($('zip').files[0])}
+$('zip').addEventListener('change',onPick);$('zip').addEventListener('input',onPick);
+var pickData=false;
+async function nativePick(){
+  if(!FP){$('e4').textContent='مكوّن اختيار الملفات غير متوفر في هذا الإصدار';return}
+  try{
+    const r=await FP.pickFiles({limit:1,readData:pickData});
+    const f=r.files&&r.files[0];if(!f)return;
+    let blob;
+    if(pickData){
+      const bin=atob(f.data||'');const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+      blob=new Blob([u]);
+    }else{
+      const res=await fetch(Capacitor.convertFileSrc(f.path));
+      if(!res.ok)throw new Error('read '+res.status);
+      blob=await res.blob();
+    }
+    if(!blob.size)throw new Error('empty');
+    pickedFile=new File([blob],f.name||'project.zip',{type:'application/zip'});
+    await showPicked(pickedFile);
+  }catch(e){
+    const msg=String((e&&e.message)||e);
+    if(/cancel/i.test(msg))return;
+    if(!pickData){pickData=true;$('e4').textContent='تعذّرت القراءة ('+msg+')، اضغط مرة ثانية'}
+    else $('e4').textContent='تعذّرت قراءة الملف: '+msg;
+  }
+}
+if(NATIVE){$('zip').classList.add('hid');$('drop').addEventListener('click',nativePick)}
+go(1);
+// دخول تلقائي
+(async()=>{const saved=await kvGet('gh_token');if(saved)login(saved,true)})();
+</script>
+</body>
+</html>
