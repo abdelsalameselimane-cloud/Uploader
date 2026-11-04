@@ -79,6 +79,11 @@ button{font:inherit}
 .lk .u{display:block;direction:ltr;text-align:left;color:var(--pr);font-size:.76rem;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:none}
 .lk .act{display:flex;gap:6px}
 .fl{transform:scaleX(-1)}
+.repo .bx{display:flex;gap:6px;flex:none}
+.badge{font-size:.7rem;padding:2px 9px;border-radius:20px;background:rgba(79,107,255,.14);color:var(--pr);font-weight:700}
+.badge.s{background:rgba(19,161,90,.14);color:var(--ok)}
+#ldBody .btn,#ldBody .lk{margin-top:12px}
+#ldBody .bar{margin:10px 0 0}
 .seg{display:flex;background:var(--in);border:1px solid var(--bd);border-radius:13px;padding:4px;margin:10px 0 6px}
 .seg button{flex:1;border:0;background:none;color:var(--mu);padding:10px;border-radius:10px;font-weight:700}
 .seg button.on{background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff}
@@ -171,6 +176,7 @@ button.sup{width:100%;font:inherit;text-align:start;cursor:pointer}
   <div class="modes">
     <button class="mode" onclick="pickKind('app')"><div class="tile"><svg class="ic "><use href="#i-phone"/></svg></div><div><b data-i18n="mode_app">رفع تطبيق (APK)</b><small data-i18n="mode_app_d">مشروع أندرويد أو Flutter أو ويب يتحوّل إلى تطبيق</small></div></button>
     <button class="mode" onclick="pickKind('site')"><div class="tile"><svg class="ic "><use href="#i-globe"/></svg></div><div><b data-i18n="mode_site">نشر موقع HTML</b><small data-i18n="mode_site_d">استضافة مجانية على GitHub ورابط عام لموقعك</small></div></button>
+    <button class="mode" onclick="openLib()"><div class="tile"><svg class="ic "><use href="#i-repo"/></svg></div><div><b data-i18n="mode_lib">مشاريعي</b><small data-i18n="mode_lib_d">حمّل تطبيقاتك أو افتح مواقعك مباشرة دون الحاجة لزيارة GitHub</small></div></button>
   </div>
   <button type="button" class="sup" onclick="openSupport()"><div class="tile"><svg class="ic "><use href="#i-heart"/></svg></div><div class="tx"><b data-i18n="sup_title">ادعم المطوّر</b><small data-i18n="sup_desc">أعجبك التطبيق؟ ادعمه بأي مبلغ بعملة USDT</small></div><svg class="ic fw"><use href="#i-arrow"/></svg></button>
 </section>
@@ -223,6 +229,21 @@ button.sup{width:100%;font:inherit;text-align:start;cursor:pointer}
   <button class="btn sec" onclick="closeSupport()"><svg class="ic bk"><use href="#i-arrow"/></svg><span data-i18n="back">رجوع</span></button>
 </section>
 </main>
+<section class="card hid" id="s6">
+  <div id="libList">
+    <h2 data-i18n="lib_title">مشاريعي</h2>
+    <p class="mu" data-i18n="lib_hint">اختر مشروعاً لتحميله أو فتحه</p>
+    <input id="lq" data-i18n-ph="ph_search" placeholder="بحث..." dir="ltr" oninput="renderLibList()">
+    <div class="list" id="libBox"></div>
+    <button class="btn sec" onclick="go(2)"><svg class="ic bk"><use href="#i-arrow"/></svg><span data-i18n="back">رجوع</span></button>
+  </div>
+  <div id="libDetail" class="hid">
+    <div class="who"><div class="tile"><svg class="ic "><use href="#i-repo"/></svg></div><div><h2 id="ldName"></h2><p class="sub" id="ldSub"></p></div></div>
+    <div id="ldBody"></div>
+    <button class="btn sec" onclick="libBack()"><svg class="ic bk"><use href="#i-arrow"/></svg><span data-i18n="back">رجوع</span></button>
+  </div>
+</section>
+
 <div class="sheet hid" id="langSheet" onclick="if(event.target===this)closeLang()">
   <div class="sheet-in">
     <h2 data-i18n="lang_title">اللغة</h2>
@@ -245,7 +266,7 @@ var store={get:k=>{try{return localStorage.getItem(k)}catch{return null}},set:(k
 
 /* ===== i18n: ar / en / fr ===== */
 var LANGS=['ar','en','fr'],RTL={ar:1};
-var I18N={"ar": {"app_title": "رافع GitHub", "app_sub": "تطبيقاتك ومواقعك على GitHub", "aria_support": "ادعم المطوّر", "aria_logout": "خروج", "aria_lang": "اللغة", "aria_copy": "نسخ", "aria_open": "فتح", "lang_title": "اللغة", "lang_auto": "تلقائي (لغة الجهاز)", "login_title": "تسجيل الدخول", "login_desc": "سجّل دخولك بحساب GitHub مباشرة، بدون توكن ولا كلمات مرور. يبقى حسابك مرتبطاً ولا تحتاج الدخول كل مرة.", "login_btn": "الدخول بحساب GitHub", "tok_toggle": "الدخول بتوكن (متقدم)", "tok_btn": "دخول بالتوكن", "dev_desc": "افتح GitHub وأدخل هذا الرمز ثم اضغط Authorize:", "dev_open": "نسخ الرمز وفتح GitHub", "cancel": "إلغاء", "cid_desc": "إعداد لمرة واحدة: أنشئ تطبيق OAuth خاصاً بك لربط الدخول.", "cid_li1": "افتح github.com/settings/developers ← OAuth Apps ← New OAuth App", "cid_li2": "الاسم أي اسم، وفي Homepage و Callback اكتب https://github.com", "cid_li3": "فعّل خيار <b>Enable Device Flow</b> ثم Register", "cid_li4": "انسخ <b>Client ID</b> والصقه هنا", "cid_save": "حفظ ومتابعة", "retry": "إعادة المحاولة", "err_prefix": "خطأ: ", "verifying": "جاري التحقق...", "enter_token": "أدخل التوكن", "session_expired": "انتهت صلاحية الدخول، سجّل دخولك من جديد", "no_conn": "تعذّر الاتصال بـ GitHub، تحقق من الإنترنت", "login_fail": "فشل الدخول: ", "only_native": "الدخول بحساب GitHub يعمل داخل تطبيق APK فقط لأن المتصفح يمنعه. ثبّت التطبيق أو استخدم التوكن هنا.", "waiting_approval": "بانتظار موافقتك...", "code_expired": "انتهت صلاحية الرمز، حاول مرة أخرى", "denied": "تم رفض الطلب", "start_fail": "تعذّر بدء الدخول: ", "bad_id": "معرّف غير صالح", "ask_upload": "ماذا تريد أن ترفع؟", "mode_app": "رفع تطبيق (APK)", "mode_app_d": "مشروع أندرويد أو Flutter أو ويب يتحوّل إلى تطبيق", "mode_site": "نشر موقع HTML", "mode_site_d": "استضافة مجانية على GitHub ورابط عام لموقعك", "sup_title": "ادعم المطوّر", "sup_desc": "أعجبك التطبيق؟ ادعمه بأي مبلغ بعملة USDT", "seg_new": "مشروع جديد", "seg_upd": "تحديث مشروع", "priv": "مشروع خاص (Private)", "pub_note": "الاستضافة المجانية تتطلب أن يكون المشروع عاماً (Public).", "ph_search": "بحث...", "zip_app": "اضغط لاختيار ملف ZIP", "zip_site": "اضغط لاختيار ملف ZIP أو HTML", "adv": "خيارات متقدمة", "opt_replace": "حذف الملفات القديمة واستبدالها بالكامل", "opt_apk": "بناء APK تلقائياً حسب نوع المشروع", "ph_msg": "رسالة التحديث (اختياري)", "back": "رجوع", "upload": "رفع", "up_app": "رفع تطبيق", "up_site": "نشر موقع HTML", "loading": "جاري التحميل...", "not_zip": "هذا الملف ليس ZIP صالحاً", "read_fail_retry": "تعذّرت قراءة الملف، جرّب اختياره مرة أخرى", "pick_repo": "اختر المشروع من القائمة", "bad_name": "اسم المشروع غير صالح: أحرف إنجليزية وأرقام و - _ . فقط", "pick_zip_site": "اختر ملف ZIP أو HTML أولاً", "pick_zip": "اختر ملف ZIP أولاً", "html_for_app": "هذا ملف HTML، اختر ملف ZIP للتطبيق", "reading": "قراءة الملف...", "n_files": "{n} ملف", "empty_zip": "الملف فارغ", "no_index": "لم أجد ملف index.html في المشروع", "creating": "إنشاء المشروع...", "empty_repo": "مشروع فارغ، تهيئة...", "uploading": "رفع الملفات...", "upload_fail_file": "فشل رفع {n}: ", "wf_exists": "يوجد ملف بناء في المشروع، تُرك كما هو", "proj_type": "نوع المشروع: {l} — أُضيف ملف بناء APK", "no_type": "لم أتعرف على نوع المشروع، لم يُضف بناء APK", "building_release": "بناء الإصدار...", "enabling_pages": "تفعيل الاستضافة...", "no_picker": "مكوّن اختيار الملفات غير متوفر في هذا الإصدار", "read_retry": "تعذّرت القراءة ({m})، اضغط مرة ثانية", "file_read_fail": "تعذّرت قراءة الملف: ", "done_title": "تم الرفع بنجاح", "apk_dl": "تحميل التطبيق (APK)", "upload_another": "رفع مشروع آخر", "dl_apk_direct": "تحميل APK مباشر", "dl_apk_direct_d": "يعمل بعد انتهاء البناء (نحو 5 دقائق)", "dl_zip": "تحميل المشروع (ZIP)", "follow_build": "متابعة البناء", "open_site": "فتح الموقع", "your_site": "رابط موقعك", "site_soon": "يظهر خلال دقيقة أو دقيقتين", "repo_page": "صفحة المشروع", "private_note": "المشروع خاص: الروابط تعمل لحسابك فقط", "ch_status": "حالة البناء", "ch_result": "نتيجة البناء", "act_download": "تحميل التطبيق", "act_copy": "نسخ الخلل", "act_open": "فتح الموقع", "copied_err": "تم نسخ الخلل", "copy_fail": "تعذّر النسخ", "copied": "تم النسخ", "copy_manual": "تعذّر النسخ، حدّد النص يدوياً", "building": "جاري بناء التطبيق", "build_eta": "قد يستغرق 5 إلى 8 دقائق", "build_failed": "فشل البناء", "reading_log": "جاري قراءة سجل الخطأ...", "in_step": "في الخطوة: {s}", "log_fail": "تعذّر قراءة السجل", "what_build": "بناء التطبيق", "what_site": "نشر الموقع", "failed": "فشل {x}", "copy_log": "نسخ سجل الخطأ", "open_gh": "فتح على GitHub", "pages_enable_fail": "تعذّر تفعيل الاستضافة", "publishing": "جاري نشر الموقع", "publish_eta": "يستغرق عادةً أقل من دقيقتين", "elapsed": "الوقت المنقضي {t}", "site_done": "تم نشر الموقع", "site_done_sub": "قد يحتاج ظهوره دقيقة إضافية", "site_published": "تم نشر موقعك", "pages_build_fail": "فشل بناء الصفحات", "publish_slow": "النشر يستغرق وقتاً طويلاً", "check_pages": "تحقق من إعدادات Pages في المشروع", "n_min": "{m} د", "build_not_started": "لم يبدأ البناء", "check_actions": "تأكد أن GitHub Actions مفعّل في المشروع", "uploaded": "تم الرفع", "no_auto_build": "لا يوجد بناء تلقائي لهذا المشروع", "build_slow": "البناء يستغرق وقتاً طويلاً", "follow_actions": "تابعه من صفحة Actions", "build_done": "اكتمل البناء", "app_ready": "التطبيق جاهز للتحميل", "build_done_n": "اكتمل بناء التطبيق", "bm_desc": "متابعة البناء والنشر", "dl_progress": "جاري التحميل...", "dl_pct": "جاري التحميل {p}%", "opening_installer": "جاري فتح المثبّت...", "install_hint": "اضغط «تثبيت». وإن طلب الهاتف السماح فعّله ثم أعد الضغط", "dl_fail": "تعذّر التحميل داخل التطبيق، سيفتح المتصفح", "sup_thanks": "مرحباً، أنا مطوّر هذه المشاريع. أبنيها في وقتي الخاص وأشاركها مجاناً. إن أفادتك، فدعمك مهما كان بسيطاً يعني لي الكثير. شكراً لك من القلب. — Puck", "sup_scan": "امسح الرمز بتطبيق محفظتك", "f_currency": "العملة", "f_network": "الشبكة", "f_address": "عنوان المحفظة", "uid_hint": "للتحويل الداخلي بدون رسوم", "sup_note": "يرجى الإرسال عبر شبكة TRON (TRC20) فقط، لأن الإرسال عبر شبكة أخرى قد يضيّع المبلغ."}, "en": {"app_title": "GitHub Uploader", "app_sub": "Your apps and sites on GitHub", "aria_support": "Support the developer", "aria_logout": "Log out", "aria_lang": "Language", "aria_copy": "Copy", "aria_open": "Open", "lang_title": "Language", "lang_auto": "Automatic (device language)", "login_title": "Sign in", "login_desc": "Sign in with your GitHub account directly, no token or password needed. Your account stays linked, so you don’t have to sign in every time.", "login_btn": "Sign in with GitHub", "tok_toggle": "Sign in with a token (advanced)", "tok_btn": "Sign in with token", "dev_desc": "Open GitHub, enter this code, then tap Authorize:", "dev_open": "Copy code and open GitHub", "cancel": "Cancel", "cid_desc": "One-time setup: create your own OAuth app to link sign-in.", "cid_li1": "Open github.com/settings/developers → OAuth Apps → New OAuth App", "cid_li2": "Use any name, and enter https://github.com in Homepage and Callback", "cid_li3": "Turn on <b>Enable Device Flow</b>, then Register", "cid_li4": "Copy the <b>Client ID</b> and paste it here", "cid_save": "Save and continue", "retry": "Try again", "err_prefix": "Error: ", "verifying": "Verifying...", "enter_token": "Enter the token", "session_expired": "Your session expired, please sign in again", "no_conn": "Couldn’t reach GitHub, check your internet connection", "login_fail": "Sign-in failed: ", "only_native": "Signing in with GitHub only works inside the APK app because browsers block it. Install the app or use a token here.", "waiting_approval": "Waiting for your approval...", "code_expired": "The code expired, try again", "denied": "Request denied", "start_fail": "Couldn’t start sign-in: ", "bad_id": "Invalid ID", "ask_upload": "What do you want to upload?", "mode_app": "Upload an app (APK)", "mode_app_d": "An Android, Flutter or web project turned into an app", "mode_site": "Publish an HTML site", "mode_site_d": "Free hosting on GitHub with a public link to your site", "sup_title": "Support the developer", "sup_desc": "Like the app? Support it with any amount in USDT", "seg_new": "New project", "seg_upd": "Update project", "priv": "Private project", "pub_note": "Free hosting requires the project to be public.", "ph_search": "Search...", "zip_app": "Tap to choose a ZIP file", "zip_site": "Tap to choose a ZIP or HTML file", "adv": "Advanced options", "opt_replace": "Delete old files and replace them completely", "opt_apk": "Build an APK automatically based on project type", "ph_msg": "Update message (optional)", "back": "Back", "upload": "Upload", "up_app": "Upload an app", "up_site": "Publish an HTML site", "loading": "Loading...", "not_zip": "This file is not a valid ZIP", "read_fail_retry": "Couldn’t read the file, try picking it again", "pick_repo": "Choose a project from the list", "bad_name": "Invalid project name: English letters, digits and - _ . only", "pick_zip_site": "Choose a ZIP or HTML file first", "pick_zip": "Choose a ZIP file first", "html_for_app": "This is an HTML file, choose a ZIP file for the app", "reading": "Reading file...", "n_files": "{n} files", "empty_zip": "The file is empty", "no_index": "Couldn’t find an index.html file in the project", "creating": "Creating project...", "empty_repo": "Empty project, initializing...", "uploading": "Uploading files...", "upload_fail_file": "Failed to upload {n}: ", "wf_exists": "The project already has a build file, left unchanged", "proj_type": "Project type: {l}, APK build file added", "no_type": "Couldn’t recognize the project type, no APK build added", "building_release": "Preparing release...", "enabling_pages": "Enabling hosting...", "no_picker": "The file picker component isn’t available in this version", "read_retry": "Read failed ({m}), tap again", "file_read_fail": "Couldn’t read the file: ", "done_title": "Upload complete", "apk_dl": "Download app (APK)", "upload_another": "Upload another project", "dl_apk_direct": "Direct APK download", "dl_apk_direct_d": "Works once the build finishes (about 5 minutes)", "dl_zip": "Download project (ZIP)", "follow_build": "Follow the build", "open_site": "Open site", "your_site": "Your site link", "site_soon": "Appears within a minute or two", "repo_page": "Project page", "private_note": "Private project: links only work for your account", "ch_status": "Build status", "ch_result": "Build result", "act_download": "Download app", "act_copy": "Copy error", "act_open": "Open site", "copied_err": "Error copied", "copy_fail": "Couldn’t copy", "copied": "Copied", "copy_manual": "Couldn’t copy, select the text manually", "building": "Building the app", "build_eta": "May take 5 to 8 minutes", "build_failed": "Build failed", "reading_log": "Reading the error log...", "in_step": "At step: {s}", "log_fail": "Couldn’t read the log", "what_build": "building the app", "what_site": "publishing the site", "failed": "Failed {x}", "copy_log": "Copy error log", "open_gh": "Open on GitHub", "pages_enable_fail": "Couldn’t enable hosting", "publishing": "Publishing the site", "publish_eta": "Usually takes under two minutes", "elapsed": "Elapsed time {t}", "site_done": "Site published", "site_done_sub": "It may take an extra minute to appear", "site_published": "Your site is published", "pages_build_fail": "Pages build failed", "publish_slow": "Publishing is taking a long time", "check_pages": "Check the Pages settings in the project", "n_min": "{m} min", "build_not_started": "The build didn’t start", "check_actions": "Make sure GitHub Actions is enabled in the project", "uploaded": "Uploaded", "no_auto_build": "This project has no automatic build", "build_slow": "The build is taking a long time", "follow_actions": "Follow it from the Actions page", "build_done": "Build complete", "app_ready": "The app is ready to download", "build_done_n": "App build complete", "bm_desc": "Tracking build and publishing", "dl_progress": "Downloading...", "dl_pct": "Downloading {p}%", "opening_installer": "Opening the installer...", "install_hint": "Tap “Install”. If the phone asks for permission, allow it and tap again", "dl_fail": "Couldn’t download inside the app, opening the browser", "sup_thanks": "Hi, I’m the developer behind these projects. I build them in my spare time and share them for free. If they’ve helped you, your support, big or small, means a lot to me. Thank you from the heart. — Puck", "sup_scan": "Scan with your wallet app", "f_currency": "Currency", "f_network": "Network", "f_address": "Wallet address", "uid_hint": "for fee-free internal transfers", "sup_note": "Please send only via the TRON (TRC20) network, since funds sent over any other network can be lost."}, "fr": {"app_title": "GitHub Uploader", "app_sub": "Vos applications et sites sur GitHub", "aria_support": "Soutenir le développeur", "aria_logout": "Se déconnecter", "aria_lang": "Langue", "aria_copy": "Copier", "aria_open": "Ouvrir", "lang_title": "Langue", "lang_auto": "Automatique (langue de l’appareil)", "login_title": "Connexion", "login_desc": "Connectez-vous directement avec votre compte GitHub, sans jeton ni mot de passe. Votre compte reste lié, inutile de vous reconnecter à chaque fois.", "login_btn": "Se connecter avec GitHub", "tok_toggle": "Se connecter avec un jeton (avancé)", "tok_btn": "Connexion par jeton", "dev_desc": "Ouvrez GitHub, saisissez ce code, puis appuyez sur Authorize :", "dev_open": "Copier le code et ouvrir GitHub", "cancel": "Annuler", "cid_desc": "Configuration unique : créez votre propre application OAuth pour lier la connexion.", "cid_li1": "Ouvrez github.com/settings/developers → OAuth Apps → New OAuth App", "cid_li2": "Choisissez un nom quelconque et saisissez https://github.com dans Homepage et Callback", "cid_li3": "Activez <b>Enable Device Flow</b>, puis Register", "cid_li4": "Copiez le <b>Client ID</b> et collez-le ici", "cid_save": "Enregistrer et continuer", "retry": "Réessayer", "err_prefix": "Erreur : ", "verifying": "Vérification...", "enter_token": "Saisissez le jeton", "session_expired": "Session expirée, reconnectez-vous", "no_conn": "Impossible de joindre GitHub, vérifiez votre connexion", "login_fail": "Échec de la connexion : ", "only_native": "La connexion avec GitHub ne fonctionne que dans l’application APK, car le navigateur la bloque. Installez l’application ou utilisez un jeton ici.", "waiting_approval": "En attente de votre approbation...", "code_expired": "Le code a expiré, réessayez", "denied": "Demande refusée", "start_fail": "Impossible de démarrer la connexion : ", "bad_id": "Identifiant invalide", "ask_upload": "Que voulez-vous envoyer ?", "mode_app": "Envoyer une application (APK)", "mode_app_d": "Un projet Android, Flutter ou web transformé en application", "mode_site": "Publier un site HTML", "mode_site_d": "Hébergement gratuit sur GitHub avec un lien public vers votre site", "sup_title": "Soutenir le développeur", "sup_desc": "Vous aimez l’application ? Soutenez-la avec n’importe quel montant en USDT", "seg_new": "Nouveau projet", "seg_upd": "Mettre à jour un projet", "priv": "Projet privé (Private)", "pub_note": "L’hébergement gratuit exige un projet public (Public).", "ph_search": "Rechercher...", "zip_app": "Appuyez pour choisir un fichier ZIP", "zip_site": "Appuyez pour choisir un fichier ZIP ou HTML", "adv": "Options avancées", "opt_replace": "Supprimer les anciens fichiers et les remplacer entièrement", "opt_apk": "Générer l’APK automatiquement selon le type de projet", "ph_msg": "Message de mise à jour (facultatif)", "back": "Retour", "upload": "Envoyer", "up_app": "Envoyer une application", "up_site": "Publier un site HTML", "loading": "Chargement...", "not_zip": "Ce fichier n’est pas un ZIP valide", "read_fail_retry": "Lecture du fichier impossible, essayez de le sélectionner à nouveau", "pick_repo": "Choisissez un projet dans la liste", "bad_name": "Nom de projet invalide : lettres latines, chiffres et - _ . uniquement", "pick_zip_site": "Choisissez d’abord un fichier ZIP ou HTML", "pick_zip": "Choisissez d’abord un fichier ZIP", "html_for_app": "Ceci est un fichier HTML, choisissez un fichier ZIP pour l’application", "reading": "Lecture du fichier...", "n_files": "{n} fichiers", "empty_zip": "Le fichier est vide", "no_index": "Aucun fichier index.html trouvé dans le projet", "creating": "Création du projet...", "empty_repo": "Projet vide, initialisation...", "uploading": "Envoi des fichiers...", "upload_fail_file": "Échec de l’envoi de {n} : ", "wf_exists": "Le projet contient déjà un fichier de build, laissé tel quel", "proj_type": "Type de projet : {l}, fichier de build APK ajouté", "no_type": "Type de projet non reconnu, aucun build APK ajouté", "building_release": "Préparation de la version...", "enabling_pages": "Activation de l’hébergement...", "no_picker": "Le sélecteur de fichiers n’est pas disponible dans cette version", "read_retry": "Échec de lecture ({m}), appuyez à nouveau", "file_read_fail": "Lecture du fichier impossible : ", "done_title": "Envoi réussi", "apk_dl": "Télécharger l’application (APK)", "upload_another": "Envoyer un autre projet", "dl_apk_direct": "Téléchargement direct de l’APK", "dl_apk_direct_d": "Disponible une fois le build terminé (environ 5 minutes)", "dl_zip": "Télécharger le projet (ZIP)", "follow_build": "Suivre le build", "open_site": "Ouvrir le site", "your_site": "Lien de votre site", "site_soon": "Apparaît dans une à deux minutes", "repo_page": "Page du projet", "private_note": "Projet privé : les liens ne fonctionnent que pour votre compte", "ch_status": "État du build", "ch_result": "Résultat du build", "act_download": "Télécharger l’application", "act_copy": "Copier l’erreur", "act_open": "Ouvrir le site", "copied_err": "Erreur copiée", "copy_fail": "Copie impossible", "copied": "Copié", "copy_manual": "Copie impossible, sélectionnez le texte manuellement", "building": "Création de l’application", "build_eta": "Peut prendre de 5 à 8 minutes", "build_failed": "Échec du build", "reading_log": "Lecture du journal d’erreurs...", "in_step": "À l’étape : {s}", "log_fail": "Impossible de lire le journal", "what_build": "du build de l’application", "what_site": "de la publication du site", "failed": "Échec {x}", "copy_log": "Copier le journal d’erreurs", "open_gh": "Ouvrir sur GitHub", "pages_enable_fail": "Impossible d’activer l’hébergement", "publishing": "Publication du site", "publish_eta": "Prend généralement moins de deux minutes", "elapsed": "Temps écoulé {t}", "site_done": "Site publié", "site_done_sub": "Il peut falloir une minute de plus pour qu’il apparaisse", "site_published": "Votre site est publié", "pages_build_fail": "Échec de la compilation des pages", "publish_slow": "La publication prend du temps", "check_pages": "Vérifiez les paramètres Pages du projet", "n_min": "{m} min", "build_not_started": "Le build n’a pas démarré", "check_actions": "Vérifiez que GitHub Actions est activé dans le projet", "uploaded": "Envoi terminé", "no_auto_build": "Ce projet n’a pas de build automatique", "build_slow": "Le build prend du temps", "follow_actions": "Suivez-le depuis la page Actions", "build_done": "Build terminé", "app_ready": "L’application est prête à être téléchargée", "build_done_n": "Build de l’application terminé", "bm_desc": "Suivi du build et de la publication", "dl_progress": "Téléchargement...", "dl_pct": "Téléchargement {p} %", "opening_installer": "Ouverture de l’installateur...", "install_hint": "Appuyez sur « Installer ». Si le téléphone demande une autorisation, accordez-la puis appuyez à nouveau", "dl_fail": "Téléchargement impossible dans l’application, ouverture du navigateur", "sup_thanks": "Bonjour, je suis le développeur derrière ces projets. Je les crée pendant mon temps libre et je les partage gratuitement. S’ils vous ont été utiles, votre soutien, même modeste, compte énormément pour moi. Merci du fond du cœur. — Puck", "sup_scan": "Scannez avec votre application de portefeuille", "f_currency": "Devise", "f_network": "Réseau", "f_address": "Adresse du portefeuille", "uid_hint": "pour un transfert interne sans frais", "sup_note": "Merci d’envoyer uniquement via le réseau TRON (TRC20), car des fonds envoyés sur un autre réseau peuvent être perdus."}};
+var I18N={"ar": {"app_title": "رافع GitHub", "app_sub": "تطبيقاتك ومواقعك على GitHub", "aria_support": "ادعم المطوّر", "aria_logout": "خروج", "aria_lang": "اللغة", "aria_copy": "نسخ", "aria_open": "فتح", "lang_title": "اللغة", "lang_auto": "تلقائي (لغة الجهاز)", "login_title": "تسجيل الدخول", "login_desc": "سجّل دخولك بحساب GitHub مباشرة، بدون توكن ولا كلمات مرور. يبقى حسابك مرتبطاً ولا تحتاج الدخول كل مرة.", "login_btn": "الدخول بحساب GitHub", "tok_toggle": "الدخول بتوكن (متقدم)", "tok_btn": "دخول بالتوكن", "dev_desc": "افتح GitHub وأدخل هذا الرمز ثم اضغط Authorize:", "dev_open": "نسخ الرمز وفتح GitHub", "cancel": "إلغاء", "cid_desc": "إعداد لمرة واحدة: أنشئ تطبيق OAuth خاصاً بك لربط الدخول.", "cid_li1": "افتح github.com/settings/developers ← OAuth Apps ← New OAuth App", "cid_li2": "الاسم أي اسم، وفي Homepage و Callback اكتب https://github.com", "cid_li3": "فعّل خيار <b>Enable Device Flow</b> ثم Register", "cid_li4": "انسخ <b>Client ID</b> والصقه هنا", "cid_save": "حفظ ومتابعة", "retry": "إعادة المحاولة", "err_prefix": "خطأ: ", "verifying": "جاري التحقق...", "enter_token": "أدخل التوكن", "session_expired": "انتهت صلاحية الدخول، سجّل دخولك من جديد", "no_conn": "تعذّر الاتصال بـ GitHub، تحقق من الإنترنت", "login_fail": "فشل الدخول: ", "only_native": "الدخول بحساب GitHub يعمل داخل تطبيق APK فقط لأن المتصفح يمنعه. ثبّت التطبيق أو استخدم التوكن هنا.", "waiting_approval": "بانتظار موافقتك...", "code_expired": "انتهت صلاحية الرمز، حاول مرة أخرى", "denied": "تم رفض الطلب", "start_fail": "تعذّر بدء الدخول: ", "bad_id": "معرّف غير صالح", "ask_upload": "ماذا تريد أن ترفع؟", "mode_app": "رفع تطبيق (APK)", "mode_app_d": "مشروع أندرويد أو Flutter أو ويب يتحوّل إلى تطبيق", "mode_site": "نشر موقع HTML", "mode_site_d": "استضافة مجانية على GitHub ورابط عام لموقعك", "sup_title": "ادعم المطوّر", "sup_desc": "أعجبك التطبيق؟ ادعمه بأي مبلغ بعملة USDT", "seg_new": "مشروع جديد", "seg_upd": "تحديث مشروع", "priv": "مشروع خاص (Private)", "pub_note": "الاستضافة المجانية تتطلب أن يكون المشروع عاماً (Public).", "ph_search": "بحث...", "zip_app": "اضغط لاختيار ملف ZIP", "zip_site": "اضغط لاختيار ملف ZIP أو HTML", "adv": "خيارات متقدمة", "opt_replace": "حذف الملفات القديمة واستبدالها بالكامل", "opt_apk": "بناء APK تلقائياً حسب نوع المشروع", "ph_msg": "رسالة التحديث (اختياري)", "back": "رجوع", "upload": "رفع", "up_app": "رفع تطبيق", "up_site": "نشر موقع HTML", "loading": "جاري التحميل...", "not_zip": "هذا الملف ليس ZIP صالحاً", "read_fail_retry": "تعذّرت قراءة الملف، جرّب اختياره مرة أخرى", "pick_repo": "اختر المشروع من القائمة", "bad_name": "اسم المشروع غير صالح: أحرف إنجليزية وأرقام و - _ . فقط", "pick_zip_site": "اختر ملف ZIP أو HTML أولاً", "pick_zip": "اختر ملف ZIP أولاً", "html_for_app": "هذا ملف HTML، اختر ملف ZIP للتطبيق", "reading": "قراءة الملف...", "n_files": "{n} ملف", "empty_zip": "الملف فارغ", "no_index": "لم أجد ملف index.html في المشروع", "creating": "إنشاء المشروع...", "empty_repo": "مشروع فارغ، تهيئة...", "uploading": "رفع الملفات...", "upload_fail_file": "فشل رفع {n}: ", "wf_exists": "يوجد ملف بناء في المشروع، تُرك كما هو", "proj_type": "نوع المشروع: {l} — أُضيف ملف بناء APK", "no_type": "لم أتعرف على نوع المشروع، لم يُضف بناء APK", "building_release": "بناء الإصدار...", "enabling_pages": "تفعيل الاستضافة...", "no_picker": "مكوّن اختيار الملفات غير متوفر في هذا الإصدار", "read_retry": "تعذّرت القراءة ({m})، اضغط مرة ثانية", "file_read_fail": "تعذّرت قراءة الملف: ", "done_title": "تم الرفع بنجاح", "apk_dl": "تحميل التطبيق (APK)", "upload_another": "رفع مشروع آخر", "dl_apk_direct": "تحميل APK مباشر", "dl_apk_direct_d": "يعمل بعد انتهاء البناء (نحو 5 دقائق)", "dl_zip": "تحميل المشروع (ZIP)", "follow_build": "متابعة البناء", "open_site": "فتح الموقع", "your_site": "رابط موقعك", "site_soon": "يظهر خلال دقيقة أو دقيقتين", "repo_page": "صفحة المشروع", "private_note": "المشروع خاص: الروابط تعمل لحسابك فقط", "ch_status": "حالة البناء", "ch_result": "نتيجة البناء", "act_download": "تحميل التطبيق", "act_copy": "نسخ الخلل", "act_open": "فتح الموقع", "copied_err": "تم نسخ الخلل", "copy_fail": "تعذّر النسخ", "copied": "تم النسخ", "copy_manual": "تعذّر النسخ، حدّد النص يدوياً", "building": "جاري بناء التطبيق", "build_eta": "قد يستغرق 5 إلى 8 دقائق", "build_failed": "فشل البناء", "reading_log": "جاري قراءة سجل الخطأ...", "in_step": "في الخطوة: {s}", "log_fail": "تعذّر قراءة السجل", "what_build": "بناء التطبيق", "what_site": "نشر الموقع", "failed": "فشل {x}", "copy_log": "نسخ سجل الخطأ", "open_gh": "فتح على GitHub", "pages_enable_fail": "تعذّر تفعيل الاستضافة", "publishing": "جاري نشر الموقع", "publish_eta": "يستغرق عادةً أقل من دقيقتين", "elapsed": "الوقت المنقضي {t}", "site_done": "تم نشر الموقع", "site_done_sub": "قد يحتاج ظهوره دقيقة إضافية", "site_published": "تم نشر موقعك", "pages_build_fail": "فشل بناء الصفحات", "publish_slow": "النشر يستغرق وقتاً طويلاً", "check_pages": "تحقق من إعدادات Pages في المشروع", "n_min": "{m} د", "build_not_started": "لم يبدأ البناء", "check_actions": "تأكد أن GitHub Actions مفعّل في المشروع", "uploaded": "تم الرفع", "no_auto_build": "لا يوجد بناء تلقائي لهذا المشروع", "build_slow": "البناء يستغرق وقتاً طويلاً", "follow_actions": "تابعه من صفحة Actions", "build_done": "اكتمل البناء", "app_ready": "التطبيق جاهز للتحميل", "build_done_n": "اكتمل بناء التطبيق", "bm_desc": "متابعة البناء والنشر", "dl_progress": "جاري التحميل...", "dl_pct": "جاري التحميل {p}%", "opening_installer": "جاري فتح المثبّت...", "install_hint": "اضغط «تثبيت». وإن طلب الهاتف السماح فعّله ثم أعد الضغط", "dl_fail": "تعذّر التحميل داخل التطبيق، سيفتح المتصفح", "sup_thanks": "مرحباً، أنا مطوّر هذه المشاريع. أبنيها في وقتي الخاص وأشاركها مجاناً. إن أفادتك، فدعمك مهما كان بسيطاً يعني لي الكثير. شكراً لك من القلب. — Puck", "sup_scan": "امسح الرمز بتطبيق محفظتك", "f_currency": "العملة", "f_network": "الشبكة", "f_address": "عنوان المحفظة", "uid_hint": "للتحويل الداخلي بدون رسوم", "sup_note": "يرجى الإرسال عبر شبكة TRON (TRC20) فقط، لأن الإرسال عبر شبكة أخرى قد يضيّع المبلغ.", "mode_lib": "مشاريعي", "mode_lib_d": "حمّل تطبيقاتك أو افتح مواقعك مباشرة دون الحاجة لزيارة GitHub", "lib_title": "مشاريعي", "lib_hint": "اختر مشروعاً لتحميله أو فتحه", "lib_empty": "لا توجد مشاريع بعد", "badge_app": "تطبيق", "badge_site": "موقع", "lib_checking": "جاري فحص المشروع...", "lib_app": "تطبيق أندرويد", "lib_site": "موقع ويب", "lib_none": "لا يوجد تطبيق أو موقع منشور لهذا المشروع بعد.", "lib_ver": "الإصدار {v} · {s}", "lib_prep": "جاري التحضير..."}, "en": {"app_title": "GitHub Uploader", "app_sub": "Your apps and sites on GitHub", "aria_support": "Support the developer", "aria_logout": "Log out", "aria_lang": "Language", "aria_copy": "Copy", "aria_open": "Open", "lang_title": "Language", "lang_auto": "Automatic (device language)", "login_title": "Sign in", "login_desc": "Sign in with your GitHub account directly, no token or password needed. Your account stays linked, so you don’t have to sign in every time.", "login_btn": "Sign in with GitHub", "tok_toggle": "Sign in with a token (advanced)", "tok_btn": "Sign in with token", "dev_desc": "Open GitHub, enter this code, then tap Authorize:", "dev_open": "Copy code and open GitHub", "cancel": "Cancel", "cid_desc": "One-time setup: create your own OAuth app to link sign-in.", "cid_li1": "Open github.com/settings/developers → OAuth Apps → New OAuth App", "cid_li2": "Use any name, and enter https://github.com in Homepage and Callback", "cid_li3": "Turn on <b>Enable Device Flow</b>, then Register", "cid_li4": "Copy the <b>Client ID</b> and paste it here", "cid_save": "Save and continue", "retry": "Try again", "err_prefix": "Error: ", "verifying": "Verifying...", "enter_token": "Enter the token", "session_expired": "Your session expired, please sign in again", "no_conn": "Couldn’t reach GitHub, check your internet connection", "login_fail": "Sign-in failed: ", "only_native": "Signing in with GitHub only works inside the APK app because browsers block it. Install the app or use a token here.", "waiting_approval": "Waiting for your approval...", "code_expired": "The code expired, try again", "denied": "Request denied", "start_fail": "Couldn’t start sign-in: ", "bad_id": "Invalid ID", "ask_upload": "What do you want to upload?", "mode_app": "Upload an app (APK)", "mode_app_d": "An Android, Flutter or web project turned into an app", "mode_site": "Publish an HTML site", "mode_site_d": "Free hosting on GitHub with a public link to your site", "sup_title": "Support the developer", "sup_desc": "Like the app? Support it with any amount in USDT", "seg_new": "New project", "seg_upd": "Update project", "priv": "Private project", "pub_note": "Free hosting requires the project to be public.", "ph_search": "Search...", "zip_app": "Tap to choose a ZIP file", "zip_site": "Tap to choose a ZIP or HTML file", "adv": "Advanced options", "opt_replace": "Delete old files and replace them completely", "opt_apk": "Build an APK automatically based on project type", "ph_msg": "Update message (optional)", "back": "Back", "upload": "Upload", "up_app": "Upload an app", "up_site": "Publish an HTML site", "loading": "Loading...", "not_zip": "This file is not a valid ZIP", "read_fail_retry": "Couldn’t read the file, try picking it again", "pick_repo": "Choose a project from the list", "bad_name": "Invalid project name: English letters, digits and - _ . only", "pick_zip_site": "Choose a ZIP or HTML file first", "pick_zip": "Choose a ZIP file first", "html_for_app": "This is an HTML file, choose a ZIP file for the app", "reading": "Reading file...", "n_files": "{n} files", "empty_zip": "The file is empty", "no_index": "Couldn’t find an index.html file in the project", "creating": "Creating project...", "empty_repo": "Empty project, initializing...", "uploading": "Uploading files...", "upload_fail_file": "Failed to upload {n}: ", "wf_exists": "The project already has a build file, left unchanged", "proj_type": "Project type: {l}, APK build file added", "no_type": "Couldn’t recognize the project type, no APK build added", "building_release": "Preparing release...", "enabling_pages": "Enabling hosting...", "no_picker": "The file picker component isn’t available in this version", "read_retry": "Read failed ({m}), tap again", "file_read_fail": "Couldn’t read the file: ", "done_title": "Upload complete", "apk_dl": "Download app (APK)", "upload_another": "Upload another project", "dl_apk_direct": "Direct APK download", "dl_apk_direct_d": "Works once the build finishes (about 5 minutes)", "dl_zip": "Download project (ZIP)", "follow_build": "Follow the build", "open_site": "Open site", "your_site": "Your site link", "site_soon": "Appears within a minute or two", "repo_page": "Project page", "private_note": "Private project: links only work for your account", "ch_status": "Build status", "ch_result": "Build result", "act_download": "Download app", "act_copy": "Copy error", "act_open": "Open site", "copied_err": "Error copied", "copy_fail": "Couldn’t copy", "copied": "Copied", "copy_manual": "Couldn’t copy, select the text manually", "building": "Building the app", "build_eta": "May take 5 to 8 minutes", "build_failed": "Build failed", "reading_log": "Reading the error log...", "in_step": "At step: {s}", "log_fail": "Couldn’t read the log", "what_build": "building the app", "what_site": "publishing the site", "failed": "Failed {x}", "copy_log": "Copy error log", "open_gh": "Open on GitHub", "pages_enable_fail": "Couldn’t enable hosting", "publishing": "Publishing the site", "publish_eta": "Usually takes under two minutes", "elapsed": "Elapsed time {t}", "site_done": "Site published", "site_done_sub": "It may take an extra minute to appear", "site_published": "Your site is published", "pages_build_fail": "Pages build failed", "publish_slow": "Publishing is taking a long time", "check_pages": "Check the Pages settings in the project", "n_min": "{m} min", "build_not_started": "The build didn’t start", "check_actions": "Make sure GitHub Actions is enabled in the project", "uploaded": "Uploaded", "no_auto_build": "This project has no automatic build", "build_slow": "The build is taking a long time", "follow_actions": "Follow it from the Actions page", "build_done": "Build complete", "app_ready": "The app is ready to download", "build_done_n": "App build complete", "bm_desc": "Tracking build and publishing", "dl_progress": "Downloading...", "dl_pct": "Downloading {p}%", "opening_installer": "Opening the installer...", "install_hint": "Tap “Install”. If the phone asks for permission, allow it and tap again", "dl_fail": "Couldn’t download inside the app, opening the browser", "sup_thanks": "Hi, I’m the developer behind these projects. I build them in my spare time and share them for free. If they’ve helped you, your support, big or small, means a lot to me. Thank you from the heart. — Puck", "sup_scan": "Scan with your wallet app", "f_currency": "Currency", "f_network": "Network", "f_address": "Wallet address", "uid_hint": "for fee-free internal transfers", "sup_note": "Please send only via the TRON (TRC20) network, since funds sent over any other network can be lost.", "mode_lib": "My projects", "mode_lib_d": "Download your apps or open your sites directly, no GitHub needed", "lib_title": "My projects", "lib_hint": "Pick a project to download or open it", "lib_empty": "No projects yet", "badge_app": "App", "badge_site": "Site", "lib_checking": "Checking the project...", "lib_app": "Android app", "lib_site": "Website", "lib_none": "No app or site is published for this project yet.", "lib_ver": "Version {v} · {s}", "lib_prep": "Preparing..."}, "fr": {"app_title": "GitHub Uploader", "app_sub": "Vos applications et sites sur GitHub", "aria_support": "Soutenir le développeur", "aria_logout": "Se déconnecter", "aria_lang": "Langue", "aria_copy": "Copier", "aria_open": "Ouvrir", "lang_title": "Langue", "lang_auto": "Automatique (langue de l’appareil)", "login_title": "Connexion", "login_desc": "Connectez-vous directement avec votre compte GitHub, sans jeton ni mot de passe. Votre compte reste lié, inutile de vous reconnecter à chaque fois.", "login_btn": "Se connecter avec GitHub", "tok_toggle": "Se connecter avec un jeton (avancé)", "tok_btn": "Connexion par jeton", "dev_desc": "Ouvrez GitHub, saisissez ce code, puis appuyez sur Authorize :", "dev_open": "Copier le code et ouvrir GitHub", "cancel": "Annuler", "cid_desc": "Configuration unique : créez votre propre application OAuth pour lier la connexion.", "cid_li1": "Ouvrez github.com/settings/developers → OAuth Apps → New OAuth App", "cid_li2": "Choisissez un nom quelconque et saisissez https://github.com dans Homepage et Callback", "cid_li3": "Activez <b>Enable Device Flow</b>, puis Register", "cid_li4": "Copiez le <b>Client ID</b> et collez-le ici", "cid_save": "Enregistrer et continuer", "retry": "Réessayer", "err_prefix": "Erreur : ", "verifying": "Vérification...", "enter_token": "Saisissez le jeton", "session_expired": "Session expirée, reconnectez-vous", "no_conn": "Impossible de joindre GitHub, vérifiez votre connexion", "login_fail": "Échec de la connexion : ", "only_native": "La connexion avec GitHub ne fonctionne que dans l’application APK, car le navigateur la bloque. Installez l’application ou utilisez un jeton ici.", "waiting_approval": "En attente de votre approbation...", "code_expired": "Le code a expiré, réessayez", "denied": "Demande refusée", "start_fail": "Impossible de démarrer la connexion : ", "bad_id": "Identifiant invalide", "ask_upload": "Que voulez-vous envoyer ?", "mode_app": "Envoyer une application (APK)", "mode_app_d": "Un projet Android, Flutter ou web transformé en application", "mode_site": "Publier un site HTML", "mode_site_d": "Hébergement gratuit sur GitHub avec un lien public vers votre site", "sup_title": "Soutenir le développeur", "sup_desc": "Vous aimez l’application ? Soutenez-la avec n’importe quel montant en USDT", "seg_new": "Nouveau projet", "seg_upd": "Mettre à jour un projet", "priv": "Projet privé (Private)", "pub_note": "L’hébergement gratuit exige un projet public (Public).", "ph_search": "Rechercher...", "zip_app": "Appuyez pour choisir un fichier ZIP", "zip_site": "Appuyez pour choisir un fichier ZIP ou HTML", "adv": "Options avancées", "opt_replace": "Supprimer les anciens fichiers et les remplacer entièrement", "opt_apk": "Générer l’APK automatiquement selon le type de projet", "ph_msg": "Message de mise à jour (facultatif)", "back": "Retour", "upload": "Envoyer", "up_app": "Envoyer une application", "up_site": "Publier un site HTML", "loading": "Chargement...", "not_zip": "Ce fichier n’est pas un ZIP valide", "read_fail_retry": "Lecture du fichier impossible, essayez de le sélectionner à nouveau", "pick_repo": "Choisissez un projet dans la liste", "bad_name": "Nom de projet invalide : lettres latines, chiffres et - _ . uniquement", "pick_zip_site": "Choisissez d’abord un fichier ZIP ou HTML", "pick_zip": "Choisissez d’abord un fichier ZIP", "html_for_app": "Ceci est un fichier HTML, choisissez un fichier ZIP pour l’application", "reading": "Lecture du fichier...", "n_files": "{n} fichiers", "empty_zip": "Le fichier est vide", "no_index": "Aucun fichier index.html trouvé dans le projet", "creating": "Création du projet...", "empty_repo": "Projet vide, initialisation...", "uploading": "Envoi des fichiers...", "upload_fail_file": "Échec de l’envoi de {n} : ", "wf_exists": "Le projet contient déjà un fichier de build, laissé tel quel", "proj_type": "Type de projet : {l}, fichier de build APK ajouté", "no_type": "Type de projet non reconnu, aucun build APK ajouté", "building_release": "Préparation de la version...", "enabling_pages": "Activation de l’hébergement...", "no_picker": "Le sélecteur de fichiers n’est pas disponible dans cette version", "read_retry": "Échec de lecture ({m}), appuyez à nouveau", "file_read_fail": "Lecture du fichier impossible : ", "done_title": "Envoi réussi", "apk_dl": "Télécharger l’application (APK)", "upload_another": "Envoyer un autre projet", "dl_apk_direct": "Téléchargement direct de l’APK", "dl_apk_direct_d": "Disponible une fois le build terminé (environ 5 minutes)", "dl_zip": "Télécharger le projet (ZIP)", "follow_build": "Suivre le build", "open_site": "Ouvrir le site", "your_site": "Lien de votre site", "site_soon": "Apparaît dans une à deux minutes", "repo_page": "Page du projet", "private_note": "Projet privé : les liens ne fonctionnent que pour votre compte", "ch_status": "État du build", "ch_result": "Résultat du build", "act_download": "Télécharger l’application", "act_copy": "Copier l’erreur", "act_open": "Ouvrir le site", "copied_err": "Erreur copiée", "copy_fail": "Copie impossible", "copied": "Copié", "copy_manual": "Copie impossible, sélectionnez le texte manuellement", "building": "Création de l’application", "build_eta": "Peut prendre de 5 à 8 minutes", "build_failed": "Échec du build", "reading_log": "Lecture du journal d’erreurs...", "in_step": "À l’étape : {s}", "log_fail": "Impossible de lire le journal", "what_build": "du build de l’application", "what_site": "de la publication du site", "failed": "Échec {x}", "copy_log": "Copier le journal d’erreurs", "open_gh": "Ouvrir sur GitHub", "pages_enable_fail": "Impossible d’activer l’hébergement", "publishing": "Publication du site", "publish_eta": "Prend généralement moins de deux minutes", "elapsed": "Temps écoulé {t}", "site_done": "Site publié", "site_done_sub": "Il peut falloir une minute de plus pour qu’il apparaisse", "site_published": "Votre site est publié", "pages_build_fail": "Échec de la compilation des pages", "publish_slow": "La publication prend du temps", "check_pages": "Vérifiez les paramètres Pages du projet", "n_min": "{m} min", "build_not_started": "Le build n’a pas démarré", "check_actions": "Vérifiez que GitHub Actions est activé dans le projet", "uploaded": "Envoi terminé", "no_auto_build": "Ce projet n’a pas de build automatique", "build_slow": "Le build prend du temps", "follow_actions": "Suivez-le depuis la page Actions", "build_done": "Build terminé", "app_ready": "L’application est prête à être téléchargée", "build_done_n": "Build de l’application terminé", "bm_desc": "Suivi du build et de la publication", "dl_progress": "Téléchargement...", "dl_pct": "Téléchargement {p} %", "opening_installer": "Ouverture de l’installateur...", "install_hint": "Appuyez sur « Installer ». Si le téléphone demande une autorisation, accordez-la puis appuyez à nouveau", "dl_fail": "Téléchargement impossible dans l’application, ouverture du navigateur", "sup_thanks": "Bonjour, je suis le développeur derrière ces projets. Je les crée pendant mon temps libre et je les partage gratuitement. S’ils vous ont été utiles, votre soutien, même modeste, compte énormément pour moi. Merci du fond du cœur. — Puck", "sup_scan": "Scannez avec votre application de portefeuille", "f_currency": "Devise", "f_network": "Réseau", "f_address": "Adresse du portefeuille", "uid_hint": "pour un transfert interne sans frais", "sup_note": "Merci d’envoyer uniquement via le réseau TRON (TRC20), car des fonds envoyés sur un autre réseau peuvent être perdus.", "mode_lib": "Mes projets", "mode_lib_d": "Téléchargez vos applications ou ouvrez vos sites directement, sans passer par GitHub", "lib_title": "Mes projets", "lib_hint": "Choisissez un projet pour le télécharger ou l’ouvrir", "lib_empty": "Aucun projet pour le moment", "badge_app": "App", "badge_site": "Site", "lib_checking": "Vérification du projet...", "lib_app": "Application Android", "lib_site": "Site web", "lib_none": "Aucune application ni aucun site publié pour ce projet pour le moment.", "lib_ver": "Version {v} · {s}", "lib_prep": "Préparation..."}};
 var langPref=store.get('lang');if(langPref!=='auto'&&LANGS.indexOf(langPref)<0)langPref='auto';
 var lang='en';
 function detectLang(){
@@ -255,7 +276,7 @@ function detectLang(){
 }
 function tr(k,v){
   var s=(I18N[lang]&&I18N[lang][k])||I18N.en[k]||I18N.ar[k]||k;
-  if(v)for(var x in v)s=s.split('{'+x+'}').join(v[x]);
+  if(v)for(var x in v){var y=String(v[x]);s=s.split('{'+x+'}').join(y.charAt(0)==='@'?tr(y.slice(1)):y)}
   return s;
 }
 function applyLang(){
@@ -275,6 +296,106 @@ function setLang(l){langPref=l;kvSet('lang',l);applyLang();closeLang()}
 
 /* texts that JS builds at runtime are re-rendered when the language changes */
 var scr=1,prevScr=1,apkOk=false,apkHide=false,doneInfo=null,lastBS=null;
+/* ===== My projects: download an app / open a site without visiting GitHub ===== */
+var libInfo={},libCur=null,libToken=0,reposAt=0;
+function mb(n){return (n/1048576).toFixed(1)+' MB'}
+async function loadProjectInfo(r){
+  var full=r.full_name,i=libInfo[full];if(i&&i.done)return i;
+  i={done:false,apk:null,site:null};
+  var rel=await gh('/repos/'+full+'/releases/latest').catch(function(){return null});
+  var pg=r.has_pages?await gh('/repos/'+full+'/pages').catch(function(){return null}):null;
+  if(rel&&rel.assets){var a=rel.assets.find(function(x){return x.name==='app.apk'})||rel.assets.find(function(x){return /\.apk$/i.test(x.name)});
+    if(a)i.apk={name:a.name,size:a.size,url:a.browser_download_url,api:a.url,tag:rel.tag_name}}
+  if(pg&&pg.html_url)i.site=pg.html_url;
+  i.done=true;libInfo[full]=i;return i;
+}
+function fillBadges(btn,r){
+  var box=btn.querySelector('.bx');box.innerHTML='';var i=libInfo[r.full_name];
+  if(i&&i.apk){var a=document.createElement('span');a.className='badge';a.textContent=tr('badge_app');box.appendChild(a)}
+  if(r.has_pages||(i&&i.site)){var b=document.createElement('span');b.className='badge s';b.textContent=tr('badge_site');box.appendChild(b)}
+}
+function renderLibList(){
+  var q=$('lq').value.toLowerCase(),box=$('libBox');box.innerHTML='';
+  var list=repos.filter(function(r){return r.name.toLowerCase().includes(q)});
+  if(!list.length){box.innerHTML='<p class="mu">'+tr('lib_empty')+'</p>';return}
+  list.forEach(function(r){
+    var b=document.createElement('button');b.type='button';b.className='repo';b.dataset.full=r.full_name;
+    b.innerHTML=ic(r.private?'lock':'repo')+'<span></span><span class="bx"></span>';b.children[1].textContent=r.name;
+    fillBadges(b,r);b.onclick=function(){openProject(r)};box.appendChild(b);
+  });
+}
+function rowHtml(icon,title,sub,url){
+  return '<div class="lk main"><div class="tile">'+ic(icon)+'</div><div class="tx"><b>'+title+'</b>'+(sub?'<small>'+sub+'</small>':'')+(url?'<a class="u" target="_blank" rel="noopener" href="'+url+'">'+url+'</a>':'')+'</div>'+(url?'<div class="act"><button class="ib" data-u="'+url+'" aria-label="'+tr('aria_copy')+'">'+ic('copy')+'</button></div>':'')+'</div>';
+}
+function renderLibDetail(){
+  var r=libCur;if(!r)return;var i=libInfo[r.full_name];
+  $('ldName').textContent=r.name;$('ldSub').textContent=r.full_name;
+  var h='';
+  if(!i||!i.done)h='<p class="mu">'+tr('lib_checking')+'</p>';
+  else{
+    if(i.apk)h+=rowHtml('phone',tr('lib_app'),tr('lib_ver',{v:i.apk.tag||'',s:mb(i.apk.size||0)}))+'<button class="btn" id="libApk">'+ic('download')+'<span id="libApkLbl">'+tr('apk_dl')+'</span></button><div class="bar hid" id="libBar"><i id="libBi"></i></div>';
+    if(i.site)h+=rowHtml('globe',tr('lib_site'),'',i.site)+'<a class="btn'+(i.apk?' sec':'')+'" id="libSite" target="_blank" rel="noopener" href="'+i.site+'">'+ic('ext')+'<span>'+tr('open_site')+'</span></a>';
+    if(!i.apk&&!i.site)h='<p class="mu">'+tr('lib_none')+'</p>';
+  }
+  $('ldBody').innerHTML=h;
+  var ab=$('libApk');if(ab)ab.onclick=function(){libDownload(r,i.apk)};
+  $('ldBody').querySelectorAll('button[data-u]').forEach(function(b){b.onclick=function(){copyText(b.dataset.u);b.innerHTML=ic('check');setTimeout(function(){b.innerHTML=ic('copy')},1500)}});
+}
+function renderLib(){if(libCur)renderLibDetail();else renderLibList()}
+async function libScan(){
+  var tok=++libToken,queue=repos.slice(0,60).filter(function(r){return !(libInfo[r.full_name]&&libInfo[r.full_name].done)});
+  async function worker(){
+    while(queue.length&&tok===libToken){
+      var r=queue.shift();
+      try{await loadProjectInfo(r)}catch(e){}
+      if(tok!==libToken)return;
+      var btn=$('libBox').querySelector('[data-full="'+r.full_name+'"]');if(btn)fillBadges(btn,r);
+      if(libCur&&libCur.full_name===r.full_name)renderLibDetail();
+    }
+  }
+  await Promise.all([worker(),worker(),worker(),worker()]);
+}
+async function openLib(){
+  libCur=null;$('libList').classList.remove('hid');$('libDetail').classList.add('hid');go(6);
+  if(!repos.length||Date.now()-reposAt>300000){
+    $('libBox').innerHTML='<p class="mu">'+tr('loading')+'</p>';
+    try{await loadRepos();reposAt=Date.now();libInfo={}}catch(e){$('libBox').innerHTML='';toast(e.message)}
+  }
+  renderLibList();libScan();
+}
+async function openProject(r){
+  libCur=r;$('libList').classList.add('hid');$('libDetail').classList.remove('hid');
+  renderLibDetail();
+  try{await loadProjectInfo(r)}catch(e){}
+  if(libCur===r)renderLibDetail();
+}
+function libBack(){libCur=null;$('libDetail').classList.add('hid');$('libList').classList.remove('hid');renderLibList()}
+async function libDownload(r,a){
+  var fallback=function(){window.open(r.private?'https://github.com/'+r.full_name+'/releases/latest':a.url,'_blank')};
+  if(!NATIVE){fallback();return}
+  if(dlBusy)return;dlBusy=true;var h;
+  var lbl=$('libApkLbl'),bar=$('libBar'),bi=$('libBi');
+  var set=function(p,t){bar.classList.toggle('hid',p===null);if(p!==null)bi.style.width=p+'%';lbl.textContent=t||tr('apk_dl')};
+  try{
+    set(0,tr('lib_prep'));
+    var url=a.url;
+    if(r.private){
+      var HTTP=plug('CapacitorHttp');
+      var res=await HTTP.request({url:a.api,method:'GET',headers:{Authorization:'Bearer '+token,Accept:'application/octet-stream'},disableRedirects:true});
+      var loc=res&&res.headers&&(res.headers.Location||res.headers.location);
+      if(!loc)throw new Error('no redirect');url=loc;
+    }
+    set(0,tr('dl_progress'));
+    h=await FS.addListener('progress',function(e){if(e.contentLength>0){var q=Math.round(e.bytes/e.contentLength*100);set(q,tr('dl_pct',{p:q}))}});
+    await FS.downloadFile({url:url,path:'app-update.apk',directory:'CACHE',progress:true});
+    var u=await FS.getUri({path:'app-update.apk',directory:'CACHE'});
+    set(100,tr('opening_installer'));
+    await FO.open({filePath:u.uri,contentType:'application/vnd.android.package-archive',openWithDefault:true});
+    toast(tr('install_hint'));
+  }catch(e){toast(tr('dl_fail'));fallback()}
+  finally{try{h&&h.remove()}catch(e){}setTimeout(function(){set(null);dlBusy=false},1200)}
+}
+
 function setUpTitle(){$('upTitle').textContent=tr(kind==='site'?'up_site':'up_app')}
 function refreshDyn(){
   try{
@@ -282,18 +403,20 @@ function refreshDyn(){
     if(!pickedFile&&!($('zip').files&&$('zip').files[0]))$('zname').textContent=tr(kind==='site'?'zip_site':'zip_app');
     if(lastBS)setBS(lastBS[0],tr(lastBS[1],lastBS[3]),lastBS[2]?tr(lastBS[2],lastBS[3]):'');
     if(doneInfo)renderDoneUI(doneInfo);
+    if(scr===6)renderLib();
   }catch(e){}
 }
 
 /* ===== screens (1 login, 2 home, 3 upload, 4 result, 5 support) ===== */
 function paint(n,top){
-  for(let i=1;i<=5;i++)$('s'+i).classList.toggle('hid',i!==n);
+  for(let i=1;i<=6;i++)$('s'+i).classList.toggle('hid',i!==n);
   $('out').classList.toggle('hid',!user);
-  if(n<5)[...$('steps').children].forEach((e,i)=>e.classList.toggle('on',i<n));
+  if(n<5||n===6)[...$('steps').children].forEach((e,i)=>e.classList.toggle('on',i<(n===6?3:n)));
   if(top)window.scrollTo(0,0);
 }
 function go(n){
   if(scr===5){prevScr=n;$('out').classList.toggle('hid',!user);return}  /* a background step finished while support is open */
+  if(n!==6)libToken++;
   scr=n;paint(n);
 }
 function openSupport(){
@@ -321,7 +444,7 @@ var NATIVE=!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePl
 function plug(n){try{if(!NATIVE)return null;var P=Capacitor.Plugins;if(P&&P[n])return P[n];if(typeof Capacitor.registerPlugin==='function')return Capacitor.registerPlugin(n)}catch(e){}return null}
 var CLIENT_ID_DEFAULT='Ov23lishfKw8GEIfE078';
 var cid=()=>CLIENT_ID_DEFAULT||store.get('gh_cid')||'';
-var devTimer=null,devCancel=true;
+var devTimer=null,devCancel=true,devBusy=false,devPoll=null;
 function toggleTok(){$('tokBox').classList.toggle('hid')}
 function saveCid(){
   const v=$('cid').value.trim();
@@ -332,8 +455,40 @@ async function form(url,data){
   const r=await fetch(url,{method:'POST',headers:{Accept:'application/json','Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(data).toString()});
   return r.json();
 }
-function endDev(msg){devCancel=true;clearTimeout(devTimer);$('devBox').classList.add('hid');$('mainLogin').classList.remove('hid');$('e1').textContent=msg||''}
+function endDev(msg){devCancel=true;devPoll=null;clearTimeout(devTimer);kvDel('pending_dev');$('devBox').classList.add('hid');$('mainLogin').classList.remove('hid');$('e1').textContent=msg||''}
 function cancelDev(){endDev()}
+function runDevice(p){
+  $('ucode').textContent=p.uc;$('openGh').href=p.uri;
+  $('openGh').onclick=function(){try{navigator.clipboard.writeText(p.uc)}catch(e){}};
+  $('mainLogin').classList.add('hid');$('cidBox').classList.add('hid');$('devBox').classList.remove('hid');$('devSt').textContent=tr('waiting_approval');
+  go(1);
+  devCancel=false;devBusy=false;var iv=(p.iv||5)*1000;
+  var poll=async function(){
+    if(devCancel||devBusy)return;
+    devBusy=true;var next=true;
+    try{
+      if(Date.now()>p.end){next=false;endDev(tr('code_expired'))}
+      else{
+        var r=await form('https://github.com/login/oauth/access_token',{client_id:cid(),device_code:p.dc,grant_type:'urn:ietf:params:oauth:grant-type:device_code'});
+        if(r.access_token){next=false;endDev();await kvSet('gh_token',r.access_token);await login(r.access_token,true)}
+        else if(r.error==='slow_down')iv+=5000;
+        else if(r.error&&r.error!=='authorization_pending'){next=false;endDev(r.error==='access_denied'?tr('denied'):(r.error_description||r.error))}
+      }
+    }catch(e){}
+    devBusy=false;
+    if(next&&!devCancel)devTimer=setTimeout(poll,iv);
+  };
+  devPoll=poll;
+  devTimer=setTimeout(poll,p.first?0:iv);
+}
+async function resumeDevice(){
+  try{
+    var j=await kvGet('pending_dev');if(!j)return false;var p=JSON.parse(j);
+    if(Date.now()>p.end-5000){await kvDel('pending_dev');return false}
+    p.first=true;runDevice(p);return true;
+  }catch(e){return false}
+}
+addEventListener('wake',function(){if(!devCancel&&devPoll&&!devBusy){clearTimeout(devTimer);devPoll()}});
 async function startDevice(){
   $('e1').textContent='';
   if(!NATIVE){$('e1').textContent=tr('only_native');$('tokBox').classList.remove('hid');return}
@@ -341,22 +496,9 @@ async function startDevice(){
   try{
     const d=await form('https://github.com/login/device/code',{client_id:cid(),scope:'repo workflow'});
     if(d.error)throw new Error(d.error_description||d.error);
-    $('ucode').textContent=d.user_code;$('openGh').href=d.verification_uri;
-    $('openGh').onclick=()=>{try{navigator.clipboard.writeText(d.user_code)}catch{}};
-    $('mainLogin').classList.add('hid');$('devBox').classList.remove('hid');$('devSt').textContent=tr('waiting_approval');
-    devCancel=false;let iv=(d.interval||5)*1000;const end=Date.now()+d.expires_in*1000;
-    const poll=async()=>{
-      if(devCancel)return;
-      if(Date.now()>end){endDev(tr('code_expired'));return}
-      try{
-        const r=await form('https://github.com/login/oauth/access_token',{client_id:cid(),device_code:d.device_code,grant_type:'urn:ietf:params:oauth:grant-type:device_code'});
-        if(r.access_token){endDev();await login(r.access_token);return}
-        if(r.error==='slow_down')iv+=5000;
-        else if(r.error&&r.error!=='authorization_pending'){endDev(r.error==='access_denied'?tr('denied'):(r.error_description||r.error));return}
-      }catch(e){}
-      if(!devCancel)devTimer=setTimeout(poll,iv);
-    };
-    devTimer=setTimeout(poll,iv);
+    const p={dc:d.device_code,uc:d.user_code,uri:d.verification_uri,iv:d.interval||5,end:Date.now()+d.expires_in*1000};
+    await kvSet('pending_dev',JSON.stringify(p));   /* survives the app being killed while the user is in the browser */
+    runDevice(p);
   }catch(e){
     $('e1').textContent=tr('start_fail')+e.message;
     if(!CLIENT_ID_DEFAULT){store.del('gh_cid');$('mainLogin').classList.add('hid');$('cidBox').classList.remove('hid')}
@@ -375,7 +517,7 @@ async function login(t,silent){
   for(let i=0;i<(silent?4:1);i++){
     try{
       user=await gh('/user');$('e1').textContent='';pendingToken='';await kvSet('gh_token',token);
-      $('hello').textContent=user.login;$('av').src=user.avatar_url||'';go(2);if(silent)resumePending();return;
+      $('hello').textContent=user.login;$('av').src=user.avatar_url||'';go(2);if(silent)restoreUi().then(function(ok){if(!ok)resumePending()});return;
     }catch(e){
       lastErr=e;
       if(e.status===401)break;
@@ -703,7 +845,7 @@ async function copyText(t){
   try{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();const ok=document.execCommand('copy');a.remove();return ok}catch{return false}
 }
 function renderFail(full,text,openUrl,whatKey,subKey,subVars){
-  bsT('err','failed',subKey,Object.assign({x:tr(whatKey)},subVars||{}));
+  bsT('err','failed',subKey,Object.assign({x:'@'+whatKey},subVars||{}));
   apkReady(false);
   $('bsx').innerHTML=`<pre class="logv" id="logv"></pre><div class="row"><button class="btn" id="cpLog">${ic('copy')}<span data-i18n="copy_log">${tr('copy_log')}</span></button><a class="btn sec" target="_blank" rel="noopener" href="${openUrl}">${ic('ext')}<span data-i18n="open_gh">${tr('open_gh')}</span></a></div>`;
   $('logv').textContent=text;lastErr=text;store.set('last_err',text);
@@ -847,29 +989,56 @@ async function showPicked(f){
 async function onPick(){pickedFile=null;await showPicked($('zip').files[0])}
 $('zip').addEventListener('change',onPick);$('zip').addEventListener('input',onPick);
 var pickData=false;
+async function readPicked(f){
+  let blob;
+  if(pickData){
+    const bin=atob(f.data||'');const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+    blob=new Blob([u]);
+  }else{
+    const res=await fetch(Capacitor.convertFileSrc(f.path));
+    if(!res.ok)throw new Error('read '+res.status);
+    blob=await res.blob();
+  }
+  if(!blob.size)throw new Error('empty');
+  return new File([blob],f.name||'project.zip',{type:'application/zip'});
+}
+function saveUi(picking){return kvSet('ui_state',JSON.stringify({kind:kind,mode:mode,name:$('newName').value,sel:sel,priv:$('priv').checked,replace:$('replace').checked,autoapk:$('autoapk').checked,msg:$('msg').value,picking:!!picking,t:Date.now()}))}
+var restoredFile=null;
+function applyPicked(){if(restoredFile&&scr===3){pickedFile=restoredFile;showPicked(pickedFile)}}
+async function restoreUi(){
+  try{
+    var j=await kvGet('ui_state');if(!j)return false;var u=JSON.parse(j);
+    await kvDel('ui_state');
+    if(!u.picking||Date.now()-u.t>600000)return false;
+    pickKind(u.kind||'app');
+    $('newName').value=u.name||'';$('priv').checked=!!u.priv;$('replace').checked=!!u.replace;$('autoapk').checked=u.autoapk!==false;$('msg').value=u.msg||'';
+    if(u.mode==='update'){sel=u.sel||'';await setMode('update')}
+    applyPicked();
+    return true;
+  }catch(e){return false}
+}
+try{var APP2=plug('App');if(APP2)Promise.resolve(APP2.addListener('appRestoredResult',function(e){
+  try{
+    if(e&&e.pluginId==='FilePicker'&&e.methodName==='pickFiles'&&e.success){
+      var f=e.data&&e.data.files&&e.data.files[0];
+      if(f)readPicked(f).then(function(file){restoredFile=file;applyPicked()}).catch(function(){});
+    }
+  }catch(x){}
+})).catch(function(){})}catch(e){}
 async function nativePick(){
   if(!FP){$('e4').textContent=tr('no_picker');return}
   try{
+    await saveUi(true);   /* the system file picker can get this app killed on low-memory phones */
     const r=await FP.pickFiles({limit:1,readData:pickData});
     const f=r.files&&r.files[0];if(!f)return;
-    let blob;
-    if(pickData){
-      const bin=atob(f.data||'');const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
-      blob=new Blob([u]);
-    }else{
-      const res=await fetch(Capacitor.convertFileSrc(f.path));
-      if(!res.ok)throw new Error('read '+res.status);
-      blob=await res.blob();
-    }
-    if(!blob.size)throw new Error('empty');
-    pickedFile=new File([blob],f.name||'project.zip',{type:'application/zip'});
+    pickedFile=await readPicked(f);
     await showPicked(pickedFile);
   }catch(e){
     const msg=String((e&&e.message)||e);
     if(/cancel/i.test(msg))return;
     if(!pickData){pickData=true;$('e4').textContent=tr('read_retry',{m:msg})}
     else $('e4').textContent=tr('file_read_fail')+msg;
-  }
+  }finally{kvDel('ui_state')}
 }
 if(NATIVE){$('zip').classList.add('hid');$('drop').addEventListener('click',nativePick)}
 go(1);
@@ -877,7 +1046,7 @@ applyLang();
 // language saved in native Preferences (in case localStorage was cleared)
 (async()=>{const v=await kvGet('lang');if(v&&v!==langPref&&(v==='auto'||LANGS.indexOf(v)>=0)){langPref=v;applyLang()}})();
 // auto sign-in
-(async()=>{const saved=await kvGet('gh_token');if(saved)login(saved,true)})();
+(async()=>{const saved=await kvGet('gh_token');if(saved){kvDel('pending_dev');login(saved,true)}else resumeDevice()})();
 </script>
 </body>
 </html>
