@@ -46,7 +46,11 @@ jobs:
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
-      - run: cp android/app/build/outputs/apk/debug/app-debug.apk app.apk
+      - name: Name the APK after the project
+        run: |
+          NAME=$(basename "$GITHUB_REPOSITORY")
+          cp android/app/build/outputs/apk/debug/app-debug.apk "$NAME.apk"
+          echo "APK_FILE=$NAME.apk" >> "$GITHUB_ENV"
       - name: Sign APK (stable key)
         env:
           KEY_B64: ${{ secrets.SIGN_KEY_B64 }}
@@ -56,8 +60,8 @@ jobs:
           echo "$KEY_B64" | base64 -d > "$RUNNER_TEMP/key.pk8"
           echo "$CERT_B64" | base64 -d > "$RUNNER_TEMP/cert.der"
           AS=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)/apksigner
-          if "$AS" sign --key "$RUNNER_TEMP/key.pk8" --cert "$RUNNER_TEMP/cert.der" --out "$RUNNER_TEMP/signed.apk" app.apk && "$AS" verify "$RUNNER_TEMP/signed.apk"; then
-            mv "$RUNNER_TEMP/signed.apk" app.apk
+          if "$AS" sign --key "$RUNNER_TEMP/key.pk8" --cert "$RUNNER_TEMP/cert.der" --out "$RUNNER_TEMP/signed.apk" "$APK_FILE" && "$AS" verify "$RUNNER_TEMP/signed.apk"; then
+            mv "$RUNNER_TEMP/signed.apk" "$APK_FILE"
             echo "APK signed with the stable key"
           else
             echo "::warning::Signing failed, keeping the debug signature"
@@ -65,5 +69,5 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.run_number }}
-          name: Build ${{ github.run_number }}
-          files: app.apk
+          name: ${{ github.event.repository.name }} v${{ github.run_number }}
+          files: ${{ env.APK_FILE }}
