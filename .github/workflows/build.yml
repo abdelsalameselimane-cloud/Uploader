@@ -37,6 +37,29 @@ jobs:
           open(p,'w').write(s)
           PY
           cat android/app/src/main/AndroidManifest.xml
+      - name: Share / Open-with receiver (HTML and ZIP files sent from other apps)
+        run: |
+          D=android/app/src/main/java/com/uploader/app
+          mkdir -p "$D"
+          cp native/MainActivity.java native/ShareReceiverPlugin.java "$D/"
+          python3 - <<'PY2'
+          p='android/app/src/main/AndroidManifest.xml'
+          s=open(p).read()
+          if 'android.intent.action.SEND' not in s:
+              T=['application/zip','application/x-zip-compressed','application/x-zip']
+              H=['text/html','application/xhtml+xml']
+              send=''.join('            <data android:mimeType="%s" />\n'%m for m in T+H+['application/octet-stream','text/plain'])
+              view=''.join('            <data android:mimeType="%s" />\n'%m for m in T+H)
+              f=('        <intent-filter>\n            <action android:name="android.intent.action.SEND" />\n'
+                 '            <category android:name="android.intent.category.DEFAULT" />\n'+send+'        </intent-filter>\n'
+                 '        <intent-filter>\n            <action android:name="android.intent.action.VIEW" />\n'
+                 '            <category android:name="android.intent.category.DEFAULT" />\n'
+                 '            <category android:name="android.intent.category.BROWSABLE" />\n'
+                 '            <data android:scheme="content" />\n            <data android:scheme="file" />\n'+view+'        </intent-filter>\n')
+              s=s.replace('</activity>',f+'    </activity>',1)
+          open(p,'w').write(s)
+          PY2
+          cat android/app/src/main/AndroidManifest.xml
       - name: Version code (must grow with every build so updates install over the old app)
         run: |
           sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/; s/versionName \"1.0\"/versionName \"1.${{ github.run_number }}\"/" android/app/build.gradle
