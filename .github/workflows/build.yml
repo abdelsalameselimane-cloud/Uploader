@@ -52,6 +52,9 @@ jobs:
               view=''.join('            <data android:mimeType="%s" />\n'%m for m in T+H)
               f=('        <intent-filter>\n            <action android:name="android.intent.action.SEND" />\n'
                  '            <category android:name="android.intent.category.DEFAULT" />\n'+send+'        </intent-filter>\n'
+                 '        <intent-filter>\n            <action android:name="android.intent.action.SEND_MULTIPLE" />\n'
+                 '            <category android:name="android.intent.category.DEFAULT" />\n'
+                 '            <data android:mimeType="*/*" />\n        </intent-filter>\n'
                  '        <intent-filter>\n            <action android:name="android.intent.action.VIEW" />\n'
                  '            <category android:name="android.intent.category.DEFAULT" />\n'
                  '            <category android:name="android.intent.category.BROWSABLE" />\n'
