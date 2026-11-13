@@ -1,0 +1,63 @@
+name: Build APK
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Wrap web app
+        run: |
+          mkdir -p /tmp/cap/www
+          cp -r "."/. /tmp/cap/www/
+          cd /tmp/cap
+          npm init -y
+          npm i @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
+          NAME=$(basename "$GITHUB_REPOSITORY")
+          SLUG=$(echo "$NAME" | tr A-Z a-z | tr -cd a-z0-9)
+          OWNER=$(dirname "$GITHUB_REPOSITORY" | tr A-Z a-z | tr -cd a-z0-9)
+          [ -n "$SLUG" ] || SLUG=app
+          [ -n "$OWNER" ] || OWNER=user
+          npx cap init "$NAME" "com.u$OWNER.p$SLUG" --web-dir=www
+          npx cap add android
+          npx cap sync android
+          cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
+      - name: Collect APK
+        run: |
+          APK=$(find . /tmp/cap -path "*outputs*" -name "*.apk" 2>/dev/null | head -1 || true)
+          echo "APK=$APK"
+          test -n "$APK"
+          NAME=$(basename "$GITHUB_REPOSITORY")
+          cp "$APK" "$GITHUB_WORKSPACE/$NAME.apk"
+          echo "APK_FILE=$NAME.apk" >> "$GITHUB_ENV"
+      - name: Sign APK (stable key)
+        env:
+          KEY_B64: ${{ secrets.SIGN_KEY_B64 }}
+          CERT_B64: ${{ secrets.SIGN_CERT_B64 }}
+        run: |
+          if [ -z "$KEY_B64" ] || [ -z "$CERT_B64" ]; then echo "::warning::No signing key found, keeping the debug signature"; exit 0; fi
+          echo "$KEY_B64" | base64 -d > "$RUNNER_TEMP/key.pk8"
+          echo "$CERT_B64" | base64 -d > "$RUNNER_TEMP/cert.der"
+          AS=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)/apksigner
+          if "$AS" sign --key "$RUNNER_TEMP/key.pk8" --cert "$RUNNER_TEMP/cert.der" --out "$RUNNER_TEMP/signed.apk" "$APK_FILE" && "$AS" verify "$RUNNER_TEMP/signed.apk"; then
+            mv "$RUNNER_TEMP/signed.apk" "$APK_FILE"
+            echo "APK signed with the stable key"
+          else
+            echo "::warning::Signing failed, keeping the debug signature"
+          fi
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: ${{ github.event.repository.name }} v${{ github.run_number }}
+          files: ${{ env.APK_FILE }}
