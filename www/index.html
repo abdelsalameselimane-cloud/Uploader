@@ -185,6 +185,8 @@ button.sup{width:100%;font:inherit;text-align:start;cursor:pointer}
 .dr .db{grid-column:1/3;height:5px;border-radius:99px;background:var(--in);overflow:hidden;margin-top:4px}.dr .db i{display:block;height:100%;background:linear-gradient(90deg,var(--ok),#5fd69a);border-radius:99px}
 .trf{display:grid;grid-template-columns:1fr 1fr;gap:14px}.trf .n{font-size:1.3rem;font-weight:800;line-height:1.1}.trf small{color:var(--mu);font-size:.76rem;display:block}
 .spk{width:100%;height:70px;display:block;margin-top:10px}.spd{display:flex;justify-content:space-between;color:var(--mu);font-size:.7rem;direction:ltr;margin-top:2px}
+.oldv>summary{list-style:none;cursor:pointer;gap:8px;padding:12px 14px;margin:18px 0 0;border:1px solid var(--bd);border-radius:13px;background:var(--in)}.oldv>summary::-webkit-details-marker{display:none}
+.oldv>summary b{flex:1}.oldv>summary .ic{width:18px;height:18px;color:var(--mu);transform:rotate(90deg);transition:transform .2s}.oldv[open]>summary .ic{transform:rotate(-90deg)}
 </style>
 </head>
 <body>
@@ -998,6 +1000,7 @@ function renderLibList(){
 function rowHtml(icon,title,sub,url){
   return '<div class="lk main"><div class="tile">'+ic(icon)+'</div><div class="tx"><b>'+title+'</b>'+(sub?'<small>'+sub+'</small>':'')+(url?'<a class="u" target="_blank" rel="noopener" href="'+url+'">'+url+'</a>':'')+'</div>'+(url?'<div class="act"><button class="ib" data-u="'+url+'" aria-label="'+tr('aria_copy')+'">'+ic('copy')+'</button></div>':'')+'</div>';
 }
+var oldOpen=false;
 function renderLibDetail(){
   var r=libCur;if(!r)return;var i=libInfo[r.full_name];
   $('ldName').textContent=r.name;$('ldSub').textContent=r.full_name;
@@ -1007,17 +1010,19 @@ function renderLibDetail(){
   else{
     if(i.apk)h+=rowHtml('phone',tr('lib_app'),tr('lib_ver',{v:i.apk.tag||'',s:mb(i.apk.size||0)}))+'<button class="btn" id="libApk">'+ic('download')+'<span id="libApkLbl">'+tr('apk_dl')+'</span></button><div class="bar hid" id="libBar"><i id="libBi"></i></div>';
     if(i.old&&i.old.length){
-      h+='<div class="ovh"><b>'+tr('old_title')+'</b><span>'+tr('old_count',{n:i.old.length})+'</span></div>';
+      h+='<details class="oldv" id="oldV"'+(oldOpen?' open':'')+'><summary class="ovh"><b>'+tr('old_title')+'</b><span>'+tr('old_count',{n:i.old.length})+'</span>'+ic('chev')+'</summary>';
       i.old.forEach(function(v,k){
         var d='';try{d=new Date(v.date).toLocaleDateString(lang)}catch(e){}
         h+='<div class="ov"><div class="t"><b></b><small>'+(d?d+' · ':'')+mb(v.size||0)+'</small><div class="vb hid"><i></i></div></div><button class="ob" type="button" data-k="'+k+'">'+ic('download')+'<span>'+tr('old_dl')+'</span></button></div>';
       });
+      h+='</details>';
     }
     if(i.site)h+=rowHtml('globe',tr('lib_site'),'',i.site)+'<a class="btn'+(i.apk?' sec':'')+'" id="libSite" target="_blank" rel="noopener" href="'+i.site+'">'+ic('ext')+'<span>'+tr('open_site')+'</span></a>';
     if(!i.apk&&!i.site)h='<p class="mu">'+tr('lib_none')+'</p>';
   }
   h=rowHtml('github',tr('lib_page'),'',r.html_url||('https://github.com/'+r.full_name))+h;
   $('ldBody').innerHTML=h;
+  var od=$('oldV');if(od)od.addEventListener('toggle',function(){oldOpen=od.open});
   var ab=$('libApk');if(ab)ab.onclick=function(){libDownload(r,i.apk)};
   if(i&&i.old)$('ldBody').querySelectorAll('.ov').forEach(function(row,k){
     var v=i.old[k];if(!v)return;
@@ -1050,6 +1055,7 @@ async function openLib(){
   renderLibList();libScan();
 }
 async function openProject(r){
+  oldOpen=false;
   libCur=r;$('libList').classList.add('hid');$('libDetail').classList.remove('hid');
   renderLibDetail();
   try{await loadProjectInfo(r)}catch(e){}
