@@ -21,6 +21,42 @@ jobs:
         run: sed -i "s/__BUILD__/${{ github.run_number }}/g; s#__REPO__#${{ github.repository }}#g" www/index.html
       - run: npm install --legacy-peer-deps
       - run: npx cap add android
+      - name: Purple app icon (recolor the default Capacitor icon)
+        continue-on-error: true
+        run: |
+          python3 - <<'PYI'
+          import os,re,glob,colorsys
+          H=263/360.0
+          def rot(r,g,b):
+              h,sat,v=colorsys.rgb_to_hsv(r/255.0,g/255.0,b/255.0)
+              if sat<0.12: return r,g,b
+              nr,ng,nb=colorsys.hsv_to_rgb(H,min(1.0,sat*1.05),v)
+              return round(nr*255),round(ng*255),round(nb*255)
+          res='android/app/src/main/res'
+          def fix_xml(p):
+              t=open(p,encoding='utf-8').read()
+              def sub(m):
+                  d=m.group(1)
+                  a,c=(d[:2],d[2:]) if len(d)==8 else ('',d)
+                  r,g,b=rot(int(c[0:2],16),int(c[2:4],16),int(c[4:6],16))
+                  return '#%s%02X%02X%02X'%(a,r,g,b)
+              n=re.sub(r'#([0-9A-Fa-f]{8}|[0-9A-Fa-f]{6})\b',sub,t)
+              if n!=t:
+                  open(p,'w',encoding='utf-8').write(n); print('recolored',p)
+          for p in glob.glob(res+'/**/ic_launcher*.xml',recursive=True): fix_xml(p)
+          try:
+              from PIL import Image
+          except ImportError:
+              os.system('pip install pillow --quiet')
+              from PIL import Image
+          for p in glob.glob(res+'/**/ic_launcher*.png',recursive=True):
+              im=Image.open(p).convert('RGBA'); px=im.load(); w,h=im.size
+              for y in range(h):
+                  for x in range(w):
+                      r,g,b,a=px[x,y]
+                      if a: px[x,y]=rot(r,g,b)+(a,)
+              im.save(p); print('recolored',p)
+          PYI
       - name: Android manifest
         run: |
           python3 - <<'PY'
