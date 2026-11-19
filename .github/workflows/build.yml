@@ -28,7 +28,7 @@ jobs:
         run: |
           python3 - <<'PYI'
           import os,re,glob,colorsys
-          H=256/360.0
+          H=263/360.0
           def rot(r,g,b):
               h,sat,v=colorsys.rgb_to_hsv(r/255.0,g/255.0,b/255.0)
               if sat<0.12: return r,g,b
